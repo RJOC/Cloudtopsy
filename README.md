@@ -1,7 +1,8 @@
 # Cloudtopsy  
 Final Year Project - Data Forensics Tool for Investigating Subjects' Suspicious Cloud Activities 
 
-### Student Information
+### Student Information:
+**University Name:**   University of Limerick, Ireland  
 **Student Name:**      Ryan O'Connor  
 **Studnet Number:**    17209382  
 **Studnet Email:**     17209382@studentmail.ul.ie  
