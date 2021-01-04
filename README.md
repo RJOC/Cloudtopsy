@@ -1,20 +1,28 @@
-# Cloudtopsy
+# Cloudtopsy  
 Final Year Project - Data Forensics Tool for Investigating Subjects' Suspicious Cloud Activities 
 
-**Student Name:**      Ryan O'Connor
-**Studnet Number:**    17209382
-**Studnet Email:**     17209382@studentmail.ul.ie
+### Student Information
+**Student Name:**      Ryan O'Connor  
+**Studnet Number:**    17209382  
+**Studnet Email:**     17209382@studentmail.ul.ie  
 
-**Requirements:** 
-*IDE:*         Netbeans IDE 8.2 RC
-*WebServer:*   Glassfish 4.0, XAMPP (Apache, MYSQL)
-*JDK:*         1.8.0
+## Requirements:
+*IDE:*         Netbeans IDE 8.2 RC  
+*WebServer:*   Glassfish 4.0, XAMPP (Apache, MYSQL)  
+*JDK:*         1.8.0  
 
-**Installation:** 
-*Netbeans:*   https://netbeans.org/downloads/8.2/rc/
-*GlassFish:*  https://javaee.github.io/glassfish/download 
-*XAMPP:*      https://www.apachefriends.org/download.html
-*JDK:*        https://www.oracle.com/ie/java/technologies/javase/javase8-archive-downloads.html
+## Installation:
+*Netbeans:*   https://netbeans.org/downloads/8.2/rc/  
+*GlassFish:*  https://javaee.github.io/glassfish/download  
+*XAMPP:*      https://www.apachefriends.org/download.html  
+*JDK:*        https://www.oracle.com/ie/java/technologies/javase/javase8-archive-downloads.html  
 
-**Installation Guide:**
+## Installation Guide:
 Write this guide later
+
+
+## TODO List:
+ [X] - Set up GitHub  
+ [ ] - Set up NetBean project  
+ [ ] - GUI development  
+ [ ] - 
