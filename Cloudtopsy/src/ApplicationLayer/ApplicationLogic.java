@@ -5,7 +5,7 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: 
+ * Class name: ApplicationLogic.java
  * Class decription: 
  * 
  * 
@@ -14,10 +14,7 @@
  */
 package ApplicationLayer;
 
-/**
- *
- * @author oconn
- */
+
 public class ApplicationLogic {
     
 }

@@ -7,7 +7,7 @@
  * 
  * Class name: Cloudtopsy.java
  * Class decription: 
- * 
+ *      
  * 
  * 
  * 
@@ -21,11 +21,10 @@ import java.io.IOException;
  *
  * @author oconn
  */
-public class Cloudtopsy{
-    
-    public void Cloudtopsy(ApplicationLogic applogic)throws IOException{
-        
-        
+public class Cloudtopsy extends JFrame implements ActionListener{
+
+    public Cloudtopsy(ApplicationLogic logic) throws IOException{
+       
+       
     }
-    
 }

@@ -7,8 +7,8 @@
  * 
  * Class name:          Main.java
  * Class decription:    
- *      Calls the Cloudtopsy GUI frames 
  *      Instanciates applicaionlogic instance to pass into the frames
+ *      Calls the Cloudtopsy GUI frames 
  * 
  */
 package ApplicationLayer;
@@ -22,4 +22,5 @@ public class Main{
         ApplicationLogic logic = new ApplicationLogic();
         Cloudtopsy applicationInstance = new Cloudtopsy(logic);
      }
+     
 }
