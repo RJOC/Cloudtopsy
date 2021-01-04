@@ -1,0 +1,18 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Created By: Ryan O'Connor (17209382)
+${licensePrefix}Project: Cloudtopsy (FYP: JW01)
+${licensePrefix}Course: Mobile Communications & Security
+${licensePrefix}University: University of Limerick, Ireland
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}Class name: 
+${licensePrefix}Class decription: 
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}
+${licensePrefix}
+<#if licenseLast??>
+${licenseLast}
+</#if>
