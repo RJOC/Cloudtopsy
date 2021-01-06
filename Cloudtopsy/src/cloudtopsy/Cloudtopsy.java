@@ -91,8 +91,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
     
     
     //To handle button actions
-    //Decide if I need a register button or not
-        @Override
+    @Override
     public void actionPerformed(ActionEvent e) {
         try{
             Object source = e.getSource();
@@ -103,9 +102,9 @@ public class Cloudtopsy extends JFrame implements ActionListener{
             }
             if(source == aboutBttn){
                 setVisible(false);
-                //CTLearnFrame learn = new CTLearnFrame(this);
-          
-        }catch(Exception e){
+                CTLearnFrame Learn = new CTLearnFrame(this);
+            }
+        }catch(Exception ee){
             System.err.print(ee.getMessage());
         }
     }

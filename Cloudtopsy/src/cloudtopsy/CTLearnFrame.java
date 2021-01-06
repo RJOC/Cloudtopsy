@@ -35,9 +35,26 @@ public class CTLearnFrame extends JFrame implements ActionListener{
         parent = dad;
         
         //Frame configuration
-        setTitle("Cloud-topsy");
+        setTitle("About Cloud-topsy");
         setLayout(new BorderLayout());
         
+        //First Section
+        
+        //Second Section
+        
+        //Third Section
+        JPanel sec3 = new JPanel();
+        sec3.setLayout(new GridLayout(1,1));
+        back = new JButton("Back");
+        back.addActionListener(this);
+        sec3.add(back);
+        
+        
+        //JFrameLayout
+        getContentPane().add(sec3,BorderLayout.SOUTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650,500);
+        setVisible(true);
     }
     
     
