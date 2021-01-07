@@ -63,7 +63,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
                     
         //Second Section
         JPanel sec2 = new JPanel();
-        BufferedImage Pic = ImageIO.read(this.getClass().getResource("cloudtopsy.png"));
+        BufferedImage Pic = ImageIO.read(this.getClass().getResource("cloudtopsyLogo.png"));
         JLabel Icon = new JLabel(new ImageIcon(Pic));
         sec2.add(Icon);
         sec2.setSize(400,400);
@@ -85,7 +85,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
         getContentPane().add(sec2,BorderLayout.CENTER);
         getContentPane().add(sec3,BorderLayout.SOUTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650,500);
+        setSize(650,550);
         setVisible(true);
     }
     
@@ -97,8 +97,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
             Object source = e.getSource();
             if(source == loginBttn){
                 setVisible(false);
-                //TTTLoginFrame login = new TTTLoginFrame(this);
-                //DMSLoginFrame login = new DMSLoginFrame(this, appLogic);
+                CTLoginFrame login = new CTLoginFrame(this, appLogic);
             }
             if(source == aboutBttn){
                 setVisible(false);

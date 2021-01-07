@@ -53,7 +53,7 @@ public class CTLearnFrame extends JFrame implements ActionListener{
         //JFrameLayout
         getContentPane().add(sec3,BorderLayout.SOUTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650,500);
+        setSize(650,550);
         setVisible(true);
     }
     
