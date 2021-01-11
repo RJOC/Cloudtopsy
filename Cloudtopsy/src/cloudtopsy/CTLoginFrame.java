@@ -137,7 +137,7 @@ public class CTLoginFrame extends JFrame implements ActionListener {
                 username.requestFocusInWindow();
                 setVisible(false);  
 //Temp set to go to the admin frame for configuration setup
-                if( 1 == 1/*CurrentUserSingleton.getInstance() instanceof Manager*/){ //Admin
+                if( 1 == 2/*CurrentUserSingleton.getInstance() instanceof Manager*/){ //Admin
                     CTMenuFrameAdmin menu = new CTMenuFrameAdmin(parent, uname, new AdminLogic()); //put manLogic here
                 }else{//FInvestigator
                     CTMenuFrameInvst menu = new CTMenuFrameInvst(parent, uname, new InvstLogic());

@@ -16,4 +16,8 @@ package ApplicationLayer;
 
 public class AdminLogic {
     
+    
+    public void logout(){
+        
+    }
 }

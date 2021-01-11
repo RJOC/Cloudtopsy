@@ -16,4 +16,8 @@ package ApplicationLayer;
 
 public class InvstLogic {
     
+    
+    public void logout(){
+        //Logout function here
+    }
 }
