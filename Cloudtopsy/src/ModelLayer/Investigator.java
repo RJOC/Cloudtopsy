@@ -5,18 +5,22 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: AdminLogic.java
+ * Class name: Investigator.java
  * Class decription: 
  * 
  * 
  * 
  * 
  */
-package ApplicationLayer;
+package ModelLayer;
 
-public class AdminLogic extends ApplicationLogic{
+public class Investigator extends Users {
     
+    public Investigator(){
+        
+    }
     
-   
-    
+    public Investigator(int uID, String uName){
+        super(uID, uName);
+    }
 }

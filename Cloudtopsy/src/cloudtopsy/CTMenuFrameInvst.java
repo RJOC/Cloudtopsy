@@ -15,6 +15,8 @@
 package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Users;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -33,6 +35,7 @@ import javax.swing.JPanel;
 public class CTMenuFrameInvst extends JFrame implements ActionListener {
     //Logic  variable
     private InvstLogic inLogic;
+
     
     //Frame variables
     private Cloudtopsy parent;
@@ -42,11 +45,21 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
     private JLabel heading, fill1, fill2, fill3, fill4;
     private JButton createCase, uploadImage, cloudUse, removeImage, listFiles, createReport, closeCase, changePassword,  logout;
     
-    public CTMenuFrameInvst(Cloudtopsy dad, String username, InvstLogic inLogic ){
+    
+    //Sinleton related
+    private Users curUser; 
+    private String uname;
+    
+    
+    public CTMenuFrameInvst(Cloudtopsy dad, InvstLogic inLogic ){
         this.inLogic = inLogic;
         parent = dad;
         menuParent = this;
         
+        //Singleton call
+        curUser = CurrentUserSingleton.getInstance();
+        System.out.print(curUser.getuName());
+        uname = curUser.getuName();
         
         //Frame configuration
         setTitle("Investigator Menu");
@@ -59,7 +72,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         fill4 = new JLabel(" ");
         
         //First Section
-        heading = new JLabel("Welcome "+ "*insert name from DB*");
+        heading = new JLabel("Welcome "+ uname);
         heading.setHorizontalAlignment(JLabel.CENTER);
         heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
         add(heading,BorderLayout.NORTH);

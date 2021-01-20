@@ -5,18 +5,15 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: AdminLogic.java
+ * Class name: CustomDataType
  * Class decription: 
  * 
  * 
  * 
  * 
  */
-package ApplicationLayer;
+package ModelLayer;
 
-public class AdminLogic extends ApplicationLogic{
-    
-    
-   
-    
+public interface CustomDataType {
+    public String dataType();
 }

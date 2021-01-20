@@ -15,6 +15,9 @@
 package cloudtopsy;
 
 import ApplicationLayer.AdminLogic;
+import ApplicationLayer.ApplicationLogic;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Users;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -33,6 +36,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
     
     //Logic  variable
     private AdminLogic adLogic;
+    private ApplicationLogic appLogic;
     
     //Frame variables
     private Cloudtopsy parent;
@@ -43,11 +47,19 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
     private JButton createInvst, removeInvst, createAdmin, removeAdmin, viewReports,viewCases, obtainCaseDataReport,changePassword,  logout;
    
     
-    public CTMenuFrameAdmin(Cloudtopsy dad, String username, AdminLogic adLogic){
+    //Sinleton related
+    private Users curUser; 
+    private String uname;
+    
+    public CTMenuFrameAdmin(Cloudtopsy dad, AdminLogic adLogic){
         this.adLogic = adLogic;
         parent = dad;
         menuParent = this;
         
+        
+        //Singleton call
+        curUser = CurrentUserSingleton.getInstance();
+        uname = curUser.getuName();
         
         //Frame configuration
         setTitle("Admin Menu");
@@ -60,7 +72,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         fill4 = new JLabel(" ");
         
         //First Section
-        heading = new JLabel("Welcome "+ "*insert name from DB*");
+        heading = new JLabel("Welcome "+ uname);
         heading.setHorizontalAlignment(JLabel.CENTER);
         heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
         add(heading,BorderLayout.NORTH);
@@ -150,7 +162,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
        Object source = e.getSource();
        
         if(source == viewReports){
-
+            
         }
         else if(source == viewCases){
 

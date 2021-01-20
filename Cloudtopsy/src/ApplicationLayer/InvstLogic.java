@@ -14,10 +14,6 @@
  */
 package ApplicationLayer;
 
-public class InvstLogic {
+public class InvstLogic extends ApplicationLogic{
     
-    
-    public void logout(){
-        //Logout function here
-    }
 }

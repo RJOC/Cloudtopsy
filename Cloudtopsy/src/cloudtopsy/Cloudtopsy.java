@@ -52,7 +52,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
         JPanel sec1 = new JPanel();
         sec1.setLayout(new BorderLayout());
         JLabel heading = new JLabel("CLOUD-TOPSY",JLabel.CENTER);
-        JLabel des = new JLabel("Data Forensics Tool for Investigating Subjects' Suspicious Cloud Activity", JLabel.CENTER);
+        JLabel des = new JLabel("Data Forensics Tool for Investigating Subjects' Suspicious Cloud Activity!", JLabel.CENTER);
         
         heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 45));
         des.setVerticalAlignment(JLabel.TOP);

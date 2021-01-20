@@ -24,17 +24,27 @@ public class CurrentUserSingleton {
         //There can only be one
     }
     
-    public static Users getInstance(String uType, String uName, String fullName){
+    
+    public static Users getInstance(){
+        if(currentUser == null){
+            currentUser = new Users();
+        }
+        return currentUser;
+    }
+    
+    
+    public static Users getInstance(String uType,int uID, String uName, String uFName, String uLName){
         
         //Lazy initialization #GangOfFour
         if(currentUser == null){
             switch(uType){
-                case "Admin":
-                    currentUser = new Admin(uID, uName, fName);
+                case "Admin": //admin permission ID is 1
+                    currentUser = new Admin(uID, uName, uFName, uLName);
                     break;
-                case "Investigator":
-                    currentUser = new Investigator(uID, fName);
+                case "Investigator": //invest permission IF is 2
+                    currentUser = new Investigator(uID, uLName);
                     break;
+                    
                 default:
                     currentUser = new Users();
                     break;         

@@ -18,6 +18,9 @@ package cloudtopsy;
 import ApplicationLayer.ApplicationLogic;
 import ApplicationLayer.AdminLogic;
 import ApplicationLayer.InvstLogic;
+import ModelLayer.Admin;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Investigator;
 
 //Other imports
 import java.awt.*;
@@ -129,6 +132,8 @@ public class CTLoginFrame extends JFrame implements ActionListener {
                 value = appLogic.login(uname, pword);
             } catch (IOException ex) {
                 Logger.getLogger(CTLoginFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CTLoginFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
             
             if(value){
@@ -137,10 +142,15 @@ public class CTLoginFrame extends JFrame implements ActionListener {
                 username.requestFocusInWindow();
                 setVisible(false);  
 //Temp set to go to the admin frame for configuration setup
-                if( 1 == 2/*CurrentUserSingleton.getInstance() instanceof Manager*/){ //Admin
-                    CTMenuFrameAdmin menu = new CTMenuFrameAdmin(parent, uname, new AdminLogic()); //put manLogic here
-                }else{//FInvestigator
-                    CTMenuFrameInvst menu = new CTMenuFrameInvst(parent, uname, new InvstLogic());
+                if( CurrentUserSingleton.getInstance() instanceof Admin){ //Admin
+                    CTMenuFrameAdmin menu = new CTMenuFrameAdmin(parent, new AdminLogic()); //put manLogic here
+                }else if (CurrentUserSingleton.getInstance() instanceof Investigator){//FInvestigator
+                    CTMenuFrameInvst menu = new CTMenuFrameInvst(parent, new InvstLogic());
+                }else{
+                    JOptionPane.showMessageDialog(null,"Could not find user");
+                    username.setText("");
+                    password.setText("");
+                    username.requestFocusInWindow(); 
                 }
             }else{
                 JOptionPane.showMessageDialog(null,"There has been an error");

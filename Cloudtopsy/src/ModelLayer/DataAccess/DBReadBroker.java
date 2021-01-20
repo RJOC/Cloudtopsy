@@ -5,18 +5,17 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: AdminLogic.java
+ * Class name: 
  * Class decription: 
  * 
  * 
  * 
  * 
  */
-package ApplicationLayer;
+package ModelLayer.DataAccess;
 
-public class AdminLogic extends ApplicationLogic{
-    
-    
-   
-    
+import ModelLayer.Data;
+
+public interface DBReadBroker {
+    public Data readFromDB(String instruction, String keyWords);
 }

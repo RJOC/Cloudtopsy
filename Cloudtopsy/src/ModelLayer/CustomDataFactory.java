@@ -12,11 +12,9 @@
  * 
  * 
  */
+package ModelLayer;
 
-/**
- *
- * @author oconn
- */
-public class Users {
+public interface CustomDataFactory {
+    public CustomDataType buildData(Data data);
     
 }
