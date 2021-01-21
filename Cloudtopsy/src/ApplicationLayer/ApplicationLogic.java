@@ -47,6 +47,14 @@ public class ApplicationLogic {
             return false;
         }
     }
+    
+    public boolean changePword(String oldPword, String newPword){
+        return true;
+    }
+    
+    public boolean removeUser(){
+        
+    }
        
     
     public void logout(){

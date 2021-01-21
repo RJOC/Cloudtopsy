@@ -151,6 +151,7 @@ public class CTLoginFrame extends JFrame implements ActionListener {
                     username.setText("");
                     password.setText("");
                     username.requestFocusInWindow(); 
+                    parent.setVisible(true);
                 }
             }else{
                 JOptionPane.showMessageDialog(null,"There has been an error");
@@ -162,6 +163,7 @@ public class CTLoginFrame extends JFrame implements ActionListener {
         if(source == back){
             parent.setVisible(true);
             dispose();
+            parent.setVisible(true);
         }
     }
     

@@ -16,7 +16,10 @@ package ApplicationLayer;
 
 public class AdminLogic extends ApplicationLogic{
     
-    
+    public boolean createUser(String uname, String fname, String lname, String email, String pword, int permID){
+        //Call to db to create the user 
+        return true;
+    }
    
     
 }

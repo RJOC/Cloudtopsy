@@ -171,19 +171,25 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
 
         }
         else if(source == changePassword){
-
+            //To change password
+            setVisible(false);
+            CTChangePwordFrame changePword = new CTChangePwordFrame(this, appLogic);
         }
         else if(source == createInvst){
-
+            //create user
+            setVisible(false);
+            CTCreateUserFrame createUser = new CTCreateUserFrame(this, adLogic);
         }
         else if(source == removeInvst){
-
+            //remove user
+            setVisible(false);
+            CTCreateUserFrame removeUser = new CTRemoveUserFrame(this, adLogic);
         }
         else if(source == createAdmin){
 
         }
         else if(source == removeAdmin){
-
+            
         }
         else if(source == logout){
             adLogic.logout();

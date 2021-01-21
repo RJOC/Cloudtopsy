@@ -15,6 +15,7 @@
 package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
+import ApplicationLayer.ApplicationLogic;
 import ModelLayer.CurrentUserSingleton;
 import ModelLayer.Users;
 import java.awt.BorderLayout;
@@ -175,7 +176,9 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         }else if(source == closeCase){
 
         }else if(source == changePassword){
-
+            //To change password
+            parent.setVisible(false);
+            CTChangePwordFrame changePword = new CTChangePwordFrame(this, new ApplicationLogic());
         }else if(source == logout){
             inLogic.logout();
             parent.setVisible(true);
