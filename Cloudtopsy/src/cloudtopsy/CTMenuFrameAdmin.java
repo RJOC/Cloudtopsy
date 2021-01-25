@@ -44,7 +44,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
     
     //Frame construction variables
     private JLabel heading, fill1, fill2, fill3, fill4;
-    private JButton createInvst, removeInvst, createAdmin, removeAdmin, viewReports,viewCases, obtainCaseDataReport,changePassword,  logout;
+    private JButton createUser, removeUser, viewReports,viewCases, obtainCaseDataReport,changePassword,  logout;
    
     
     //Sinleton related
@@ -79,7 +79,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         
         //Second Section
         JPanel sec1 = new JPanel();
-        sec1.setLayout(new GridLayout(6,1));
+        sec1.setLayout(new GridLayout(5,2));
         sec1.add(fill1);
         sec1.add(fill2);     
                 
@@ -104,24 +104,14 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         sec1.add(changePassword);
         
         //Create Investigator
-        createInvst = new JButton("Create Investigator");
-        createInvst.addActionListener(this);
-        sec1.add(createInvst);
+        createUser = new JButton("Create User");
+        createUser.addActionListener(this);
+        sec1.add(createUser);
         
         //Remove Investigator
-        removeInvst = new JButton("Remove Investigator");
-        removeInvst.addActionListener(this);
-        sec1.add(removeInvst);
-        
-        //Create Admin
-        createAdmin = new JButton("Create Admin");
-        createAdmin.addActionListener(this);
-        sec1.add(createAdmin);
-        
-        //Remove Admin
-        removeAdmin = new JButton("Remove Admin");
-        removeAdmin.addActionListener(this);
-        sec1.add(removeAdmin);
+        removeUser = new JButton("Remove User");
+        removeUser.addActionListener(this);
+        sec1.add(removeUser);       
         
         //Spacing for gap
         sec1.add(fill3);
@@ -162,34 +152,28 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
        Object source = e.getSource();
        
         if(source == viewReports){
-            
+            //Related to the sleuth kit 
         }
         else if(source == viewCases){
-
+            //Related to the sleuth kit 
         }
         else if(source == obtainCaseDataReport){
-
+            //Related to the sleuth kit 
         }
         else if(source == changePassword){
             //To change password
             setVisible(false);
-            CTChangePwordFrame changePword = new CTChangePwordFrame(this, appLogic);
+            CTChangePwordFrame changePword = new CTChangePwordFrame(this, adLogic);
         }
-        else if(source == createInvst){
+        else if(source == createUser){
             //create user
             setVisible(false);
             CTCreateUserFrame createUser = new CTCreateUserFrame(this, adLogic);
         }
-        else if(source == removeInvst){
+        else if(source == removeUser){
             //remove user
             setVisible(false);
-            CTCreateUserFrame removeUser = new CTRemoveUserFrame(this, adLogic);
-        }
-        else if(source == createAdmin){
-
-        }
-        else if(source == removeAdmin){
-            
+            CTRemoveUserFrame removeUser = new CTRemoveUserFrame(this, adLogic);
         }
         else if(source == logout){
             adLogic.logout();

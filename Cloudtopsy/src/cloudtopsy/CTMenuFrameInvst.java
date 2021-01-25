@@ -59,7 +59,6 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         
         //Singleton call
         curUser = CurrentUserSingleton.getInstance();
-        System.out.print(curUser.getuName());
         uname = curUser.getuName();
         
         //Frame configuration
@@ -177,7 +176,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
 
         }else if(source == changePassword){
             //To change password
-            parent.setVisible(false);
+            setVisible(false);
             CTChangePwordFrame changePword = new CTChangePwordFrame(this, new ApplicationLogic());
         }else if(source == logout){
             inLogic.logout();

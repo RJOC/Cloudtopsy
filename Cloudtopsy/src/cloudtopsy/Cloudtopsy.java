@@ -97,7 +97,7 @@ public class Cloudtopsy extends JFrame implements ActionListener{
             Object source = e.getSource();
             if(source == loginBttn){
                 setVisible(false);
-                CTLoginFrame login = new CTLoginFrame(this, appLogic);
+                CTLoginFrame login = new CTLoginFrame(this, new ApplicationLogic());
             }
             if(source == aboutBttn){
                 setVisible(false);

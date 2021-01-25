@@ -27,6 +27,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -38,7 +41,7 @@ import javax.swing.JTextField;
 
 public class CTChangePwordFrame extends JFrame implements ActionListener{
     private CTMenuFrameAdmin adminParent;
-    private CTMenuFrameInvst invstparent;
+    private CTMenuFrameInvst invstParent;
     private ApplicationLogic appLogic;
     
     //Frame variabels;
@@ -49,10 +52,11 @@ public class CTChangePwordFrame extends JFrame implements ActionListener{
             
     //PWord variables
     private String oldpassword, newpassword;
+    private boolean success;
     
     //This sets the return frame for the menu screen
     public CTChangePwordFrame(CTMenuFrameInvst dad, ApplicationLogic appLogic ){
-        invstparent = dad;
+        invstParent = dad;
         ChangePword(appLogic);
     }
     
@@ -151,9 +155,16 @@ public class CTChangePwordFrame extends JFrame implements ActionListener{
         newpassword = newPword.getText();
         
         if(source == submit){
-            boolean success = appLogic.changePword(oldpassword,newpassword);
+            try {
+                success = appLogic.changePword(oldpassword,newpassword);
+            } catch (IOException ex) {
+                Logger.getLogger(CTChangePwordFrame.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CTChangePwordFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
             if(success){
     //Returning to the previous screen using the singleton method
+                JOptionPane.showMessageDialog(null,"Password has been changed!");
                 returnToLastFrame();
     //end of returning 
             }else{
@@ -164,13 +175,11 @@ public class CTChangePwordFrame extends JFrame implements ActionListener{
         }else if(source == clear){
             oldPword.setText("");
             newPword.setText("");
-            
         }else{
 //Returning to the previous screen using the singleton method
             JOptionPane.showMessageDialog(null, "Program not responding! Bringing you to menu screen");
             returnToLastFrame();
 //end of returning
-            
         }
     }
     
@@ -180,7 +189,7 @@ public class CTChangePwordFrame extends JFrame implements ActionListener{
             adminParent.setVisible(true);
             dispose();
         }else if(CurrentUserSingleton.getInstance() instanceof Investigator){
-            invstparent.setVisible(true);
+            invstParent.setVisible(true);
             dispose();
         }else{
             JOptionPane.showMessageDialog(null,"There has been an error, please restart application");

@@ -53,7 +53,6 @@ public class CTLoginFrame extends JFrame implements ActionListener {
         
         
         
-        
         //Frame configuration
         setTitle("Cloud-topsy Login");
         setLayout(new BorderLayout());
@@ -125,11 +124,12 @@ public class CTLoginFrame extends JFrame implements ActionListener {
             password.setText("");
         }
         if(source  == submit){
-            String uname = username.getText();
-            String pword = password.getText();
+            String usern = username.getText();
+            String passw = password.getText();
+            System.out.print("This is the password" + passw);
             boolean value = false;
             try {
-                value = appLogic.login(uname, pword);
+                value = appLogic.login(usern, passw);
             } catch (IOException ex) {
                 Logger.getLogger(CTLoginFrame.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {

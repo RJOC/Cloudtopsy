@@ -23,6 +23,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -54,7 +55,8 @@ public class DBReader implements DBReadBroker{
         return data;
     }
     
-    
+    //ClassNotFoundException note
+    //https://www.java67.com/2015/07/javalangclassnotfoundexception-com.mysql.jdbc.Driver-solution.html
     
     public static boolean login(String uname, String pword) throws IOException, ClassNotFoundException{
         Connection connection;
@@ -62,26 +64,29 @@ public class DBReader implements DBReadBroker{
         try{
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
-            ps = connection.prepareStatement("SELECT * FROM users WHERE uname = ? AND pword = ?");
+            ps = connection.prepareStatement("SELECT * FROM users WHERE uname = ? AND hashpword = ?");
             ps.setString(1, uname);
-            ps.setString(2,pword);
-
+            ps.setString(2, pword);
+            
             ResultSet result = ps.executeQuery();
-            
-            while(result.next()){
-                int id  = result.getInt(1);
+
+            if( result.next()){
+                System.out.println("SUCCESS");
                 String username = result.getString("uname");
-            }
-            
-            if(result != null ){
+                String pwordhash = result.getString("hashpword");
+                System.out.println("Username:"+username+"  hashpword:" + pwordhash);
+                connection.close();
                  return true;
              }else{
-                 return false;
+                System.out.println("FAIL");
+                connection.close();
+                return false;
              }
         }catch (SQLException ex) {
             Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+        
     }
     
     
@@ -123,9 +128,14 @@ public class DBReader implements DBReadBroker{
                     System.out.println("Loading investigator menu now... Singleton used!");
                 }
             }
+            connection.close();
         }catch (SQLException ex) {
             Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
       return data;
     }
+    
+    
+    
 }

@@ -37,6 +37,7 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
     
     //Logic variables
     private AdminLogic adLogic;
+    //Frame to go back to 
     private CTMenuFrameAdmin parent;
     
     //Frame variables
@@ -187,6 +188,7 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
             }else{
                 //Need a fail here
                  JOptionPane.showMessageDialog(null,"Teacher has not been created! There was an error!");
+        
             }
      
             
@@ -196,7 +198,8 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
                 username.setText("");
                 email.setText("");
                 password.setText("");
-
+                radioButtons.clearSelection();
+                
         }else if(source == back){
             parent.setVisible(true);
             dispose();
