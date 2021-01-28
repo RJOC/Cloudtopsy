@@ -165,7 +165,8 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
             fnameVar = fname.getText();
             lnameVar = sname.getText();
             unameVar = username.getText();
-            password.getText();
+            emailVar = email.getText();
+            pwordVar = password.getText();
  
             if(adButton.isSelected()){
                 permID = 1;
@@ -174,7 +175,7 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
                     parent.setVisible(true);
                     dispose();
                 }else{
-                    JOptionPane.showMessageDialog(null, "There has been an error: The user has not been created!");
+                    JOptionPane.showMessageDialog(null, "There has been an error: The Admin has not been created!");
                 }
             }else if(inButton.isSelected()){
                 permID = 2;
@@ -183,7 +184,7 @@ public class CTCreateUserFrame extends JFrame implements ActionListener{
                     parent.setVisible(true);
                     dispose();
                 }else{
-                    JOptionPane.showMessageDialog(null, "There has been an error: The user has not been created!");
+                    JOptionPane.showMessageDialog(null, "There has been an error: The investigator has not been created!");
                 }
             }else{
                 //Need a fail here

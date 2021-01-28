@@ -39,9 +39,8 @@ public class ApplicationLogic {
     }
     
     public boolean login(String uname, String pword) throws IOException, ClassNotFoundException{
-        pword = SALT + pword;
-        pword = generateHash(pword);
-        boolean login =  DBReader.login(uname, pword);
+        String hashedPassword = generateHash(pword);
+        boolean login =  DBReader.login(uname, hashedPassword);
         System.out.println();
         if(login == true){
             //user exists: call database to get user details
@@ -64,14 +63,12 @@ public class ApplicationLogic {
         curUser = CurrentUserSingleton.getInstance();
         uname = curUser.getuName();
         
-        oldPword = SALT+ oldPword;
         oldPword = generateHash(oldPword);
             
         boolean checkCurPword = DBReader.login(uname,oldPword); 
         
         if(checkCurPword){
             System.out.println("CheckCurPword is true!!");
-            newPword = SALT + newPword;
             newPword = generateHash(newPword);
             boolean checkWrite = DBWriter.changePword(uname,newPword);
             
@@ -86,16 +83,8 @@ public class ApplicationLogic {
         }
     }
     
-    public boolean removeUser(String uname){
-        
-        boolean checkRemove = DBWriter.removeUser(uname);
-        
-        return true;
-    }
-   
-       
-   
     public String generateHash(String input){
+        input = SALT + input;
         StringBuilder hash = new StringBuilder();
         try {
 			MessageDigest sha = MessageDigest.getInstance("SHA-1");

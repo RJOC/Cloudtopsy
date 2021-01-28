@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -41,12 +42,12 @@ public class CTRemoveUserFrame extends JFrame implements ActionListener{
     //Frame variables
     private JLabel fill, fill1,fill2,removeLab;
     private JComboBox users;
-    private String [] userList;
+    private ArrayList<String> userList;
     private JButton back, submit;
     private DefaultListCellRenderer listRenderer;
     private String returnStr, selectedVal;
     
-    public CTRemoveUserFrame(CTMenuFrameAdmin dad, AdminLogic adLogic ){
+    public CTRemoveUserFrame(CTMenuFrameAdmin dad, AdminLogic adLogic ) throws ClassNotFoundException{
         
         this.adLogic = adLogic;
         parent = dad;
@@ -68,10 +69,10 @@ public class CTRemoveUserFrame extends JFrame implements ActionListener{
         sec1.add(removeLab);
             //JCombobox for the list of users
         userList = adLogic.getAllUsers();
-        if(userList.length == 0 ){
+        if(userList.size() == 0 ){
             System.out.println("There user list is empty!");
         }
-        users = new JComboBox(userList);
+        users = new JComboBox(userList.toArray());
         
         listRenderer = new DefaultListCellRenderer();
         listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items

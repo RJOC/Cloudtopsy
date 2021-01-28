@@ -137,5 +137,37 @@ public class DBReader implements DBReadBroker{
     }
     
     
+    public static ArrayList<String> getUnameList(String curUname) throws ClassNotFoundException{
+        //String [] unameList = {};
+        ArrayList<String> unameList = new ArrayList<String>();
+        
+        Connection connection;
+        PreparedStatement ps;
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT uname FROM users WHERE uname NOT LIKE ?");
+            ps.setString(1,curUname);
+ 
+
+            ResultSet result = ps.executeQuery();
+            
+            while(result.next()){
+                String username = result.getString(1);
+                        System.out.println("The current user is equal to:::" + username);
+                unameList.add(username);
+            }
+            connection.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+      return unameList;
+        
+    }
+    
+   
+    
     
 }

@@ -50,7 +50,7 @@ public class DBWriter implements DBWriteBroker{
          return true;
      }
      
-     public static boolean changePword(String uname, String newPword) throws ClassNotFoundException{
+    public static boolean changePword(String uname, String newPword) throws ClassNotFoundException{
         Connection connection;
         PreparedStatement ps;
         try
@@ -68,35 +68,63 @@ public class DBWriter implements DBWriteBroker{
             Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
-     }
+    }
+     
+    public static boolean createUser(String uname, String fname, String lname, String email, String pword, int permID){
+        boolean result = false;
+        Connection connection;
+        PreparedStatement ps; 
+       
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("INSERT INTO users (uname,hashpword,fname,sname,email,permissionID)VALUES(?,?,?,?,?,?)");
+            ps.setString(1,uname);
+            ps.setString(2,pword);
+            ps.setString(3,fname);
+            ps.setString(4,lname);
+            ps.setString(5,email);
+            ps.setInt(6,permID);
+            ps.execute();
+            result = true;
+            connection.close();
+            
+        }catch (Exception ex){
+            System.out.println(ex);
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+            
+            System.out.println(result + "inside DBWriter");
+        }
+        
+        return result;
+    }
      
      
      public static boolean removeUser(String uname){
-         boolean result = false;
+        boolean result = false;
+        Connection connection;
+        PreparedStatement ps; 
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("DELETE FROM users WHERE uname = ?");
+            ps.setString(1,uname);
+            if(ps.execute()){
+                result = true;
+            }
+            connection.close();
+            
+        }catch (Exception ex){
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+        }
          
          
          
          
          return result;
-     }
-     
-     
-     public static boolean connectToDB()throws ClassNotFoundException{
-        boolean result = false;
-        Connection connection;
-        PreparedStatement ps;
-        
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
-            
-            
-            result = true;
-        }catch(Exception ex){
-            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-        }
-        
-        return result;
      }
 }

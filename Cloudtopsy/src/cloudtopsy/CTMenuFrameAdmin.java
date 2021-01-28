@@ -26,6 +26,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -173,7 +175,11 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         else if(source == removeUser){
             //remove user
             setVisible(false);
-            CTRemoveUserFrame removeUser = new CTRemoveUserFrame(this, adLogic);
+           try {
+               CTRemoveUserFrame removeUser = new CTRemoveUserFrame(this, adLogic);
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(CTMenuFrameAdmin.class.getName()).log(Level.SEVERE, null, ex);
+           }
         }
         else if(source == logout){
             adLogic.logout();
