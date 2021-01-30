@@ -161,7 +161,8 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         Object source = e.getSource();
         
         if(source == createCase){
-
+            setVisible(false);
+            CTCreateCase createCase = new CTCreateCase();
         }else if(source == uploadImage){
 
         }else if(source == cloudUse){
