@@ -37,7 +37,7 @@ public class CTCreateCase {
     
     public CTCreateCase(){
         try{
-            String imagePath = "INSERTPATHHERE";
+            String imagePath = "F:\\TSKTEST";
             
             SleuthkitCase sk = SleuthkitCase.newCase(imagePath + ".db");
             
