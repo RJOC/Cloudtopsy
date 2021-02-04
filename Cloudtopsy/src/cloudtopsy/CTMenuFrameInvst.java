@@ -26,6 +26,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -162,7 +165,11 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         
         if(source == createCase){
             setVisible(false);
-            CTCreateCase createCase = new CTCreateCase();
+            try {
+                CTCreateCase createCase = new CTCreateCase();
+            } catch (SQLException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else if(source == uploadImage){
 
         }else if(source == cloudUse){
