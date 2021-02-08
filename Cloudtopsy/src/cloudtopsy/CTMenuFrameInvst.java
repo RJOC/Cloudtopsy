@@ -140,11 +140,10 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         
        //JFrame Layout
         setSize(650,550);
-        setVisible(true);
         getContentPane().add(sec1,BorderLayout.CENTER);
         getContentPane().add(sec2,BorderLayout.SOUTH);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
+        setVisible(true);
         
         //Window Listener (Handles the closing of the window
         WindowListener exitListener = new WindowAdapter(){
@@ -166,12 +165,17 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         if(source == createCase){
             setVisible(false);
             try {
-                CTCreateCase createCase = new CTCreateCase();
+                CTCreateCase createCase = new CTCreateCase(this, inLogic);
             } catch (SQLException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
         }else if(source == uploadImage){
-
+            setVisible(false);
+            try {
+                CTOpenCase openase = new CTOpenCase();
+            } catch (SQLException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else if(source == cloudUse){
 
         }else if(source == removeImage){
