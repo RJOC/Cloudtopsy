@@ -38,6 +38,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
@@ -64,7 +65,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
     private JButton back, clear, submit, CImageF;
     private JTextArea CDesc;
     private JFileChooser fileChoser;
-    private String dir;
+    private String cimagepath, cdbpath;
     private int something4;
     
     
@@ -72,8 +73,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
     //Related to the sleuth kit
     private static final Logger LOGGER = Logger.getLogger(CTCreateCase.class.getName());
     private static SleuthkitCase caseDB;
-    private static String imagePath = "E:\\My Backups\\Windows10img.E01";
-    //private static String imagePath = "C:\\sqlite\\db\\ryans.iso";
+
   
     
     
@@ -172,9 +172,8 @@ public class CTCreateCase extends JFrame implements ActionListener{
             }
         };
         addWindowListener(exitListener);
-
     }
-
+    
     class OpenL implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             fileChoser = new JFileChooser();
@@ -192,8 +191,6 @@ public class CTCreateCase extends JFrame implements ActionListener{
         }
     }
     
-    
-    
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -201,16 +198,31 @@ public class CTCreateCase extends JFrame implements ActionListener{
         if(source == submit){
             cname = CName.getText();
             cdesc = CDesc.getText();
-            
-            if(cname != null && cdesc != null){
-                          
-                System.out.println(CName.getText());
-                System.out.println(CDesc.getText());
-                
+            cimagepath = CImageF.getText();
+            cdbpath = dbDir.getText();
+            if(cname != null && cdesc != null&& cimagepath != null && cdbpath != null){
+                System.out.println(cname);
+                System.out.println(cdesc);
+                System.out.println(cimagepath);
+                System.out.println(cdbpath);
+                boolean result =  false;
+                 
+                JOptionPane.showMessageDialog(null, "Creating database now: This may take a long time! You will be notified upon completion!");
+                result = inLogic.createCase(cimagepath);
+                if(result == true){
+                    if(inLogic.storeCaseData(cname, cdesc, cimagepath, cdbpath)){
+                        JOptionPane.showMessageDialog(null, "The case has been created!"); 
+                        parent.setVisible(true);
+                        dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, "The case database has been created, but we could not store case details!");
+                    }  
+                }else{
+                    JOptionPane.showMessageDialog(null, "There has been an error: There has been a problem creating the case!");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "There has been an error: Please ensure all fields are filled!");
             }
-
-            //System.out.println(c.getCurrentDirectory().toString()+ "\\" + c.getSelectedFile().getName());
-            
         }else if(source == clear){
             CName.setText("");
             CDesc.setText("");
@@ -221,83 +233,8 @@ public class CTCreateCase extends JFrame implements ActionListener{
             parent.setVisible(true);
             dispose();
         }else{
-            
-        }
-    }
-    
-    
-////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    public boolean createCase(){
-        boolean result = false;
-        try{
-            //Creates the database and configures it
-            SleuthkitCase sk = SleuthkitCase.newCase(imagePath + ".db");
-
-
-            SleuthkitCase existingCase = SleuthkitCase.openCase(imagePath + ".db");
-
-
-
-            //Timezone input
-            String timezone = "";
-
-            //Add image process, number of steps process but this returns an object that allows it to happen
-            //Timezone, addUnallocSpace, noFatFsOrphans
-            AddImageProcess process = sk.makeAddImageProcess(timezone,false,false,"");
-
-
-            //Creates a nwe arraylist of strings
-            ArrayList<String> paths = new ArrayList<String>();
-            //adds the image path to the array list
-            paths.add(imagePath);
-
-            //Trying to do something
-            try{
-                System.out.println("Logger output 1");
-                process.run(UUID.randomUUID().toString(), paths.toArray(new String[paths.size()]), 0);
-                System.out.println("Logger end 1");
-            } catch(TskDataException ex){
-                System.out.println("Logger output 2");
-                Logger.getLogger(CTCreateCase.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Logger end 2");
-            }
-
-            // print out all the images found, and their children
-            List<Image> images = sk.getImages();
-            for (Image image : images) {
-                    System.out.println("Found image: " + image.getName());
-                    System.out.println("There are " + image.getChildren().size() + " children.");
-                    for (Content content : image.getChildren()) {
-                            System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
-                    }
-            }
-
-            // print out all .txt files found
-            List<AbstractFile> files = sk.findAllFilesWhere("LOWER(name) LIKE LOWER('%.txt')");
-            for (AbstractFile file : files) {
-                    System.out.println("Found text file: " + file.getName());
-            }
-
-        }catch(TskCoreException e){ //Something major happened
-            System.out.println("Exception caught: " + e.getMessage());
-            CTCreateCase.usage(e.getMessage());
-        }
-        
-        
-        return result;
-        
-    }
-    
-    
-    public static void usage(String error){
-        System.out.println("Usage: ant -Dimage:{image string} run-sample");
-        System.out.println(error);
-        if (error.contains("deleted first")) {
-                System.out.println("A database for the image already exists. Delete it to run this sample again.");
-        } else if (error.contains("unable to open database")) {
-                System.out.println("Image must be encapsulated by double quotes. Ex: ant -Dimage=\"C:\\Users\\You\\image.E01\" run-sample");
+            parent.setVisible(true);
+            dispose();
         }
     }
 }

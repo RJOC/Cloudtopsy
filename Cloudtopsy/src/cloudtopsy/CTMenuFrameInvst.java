@@ -91,25 +91,27 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         createCase.addActionListener(this);
         sec1.add(createCase);
         
-        //Upload Disk Image
-        uploadImage = new JButton("Upload Disk Image");
-        uploadImage.addActionListener(this);
-        sec1.add(uploadImage);
-        
         //Establish use of cloud storage platforms
         cloudUse = new JButton("Establish Cloud Use");
         cloudUse.addActionListener(this);
         sec1.add(cloudUse);
+        
+        //List specified files
+        listFiles = new JButton("List Files of Type");
+        listFiles.addActionListener(this);
+        sec1.add(listFiles);
+        
+        //Upload Disk Image
+        uploadImage = new JButton("Upload Disk Image");
+        uploadImage.addActionListener(this);
+        sec1.add(uploadImage);
+       
         
         //Remove Disk Image
         removeImage = new JButton("Remove Disk Image");
         removeImage.addActionListener(this);
         sec1.add(removeImage);
         
-        //List specified files
-        listFiles = new JButton("List File Types");
-        listFiles.addActionListener(this);
-        sec1.add(listFiles);
         
         //create report based on report listings
         createReport = new JButton("Create Report");
@@ -169,6 +171,12 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             } catch (SQLException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }else if(source == cloudUse){
+            setVisible(false);
+            CTEstablishCU estcloudu = new CTEstablishCU(this, inLogic);
+        }else if(source == listFiles){
+            setVisible(false);
+            CTListFiles listfiles = new CTListFiles(this, inLogic);
         }else if(source == uploadImage){
             setVisible(false);
             try {
@@ -176,14 +184,10 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             } catch (SQLException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else if(source == cloudUse){
-
         }else if(source == removeImage){
 
-        }else if(source == listFiles){
-
         }else if(source == createReport){
-
+            
         }else if(source == closeCase){
 
         }else if(source == changePassword){
