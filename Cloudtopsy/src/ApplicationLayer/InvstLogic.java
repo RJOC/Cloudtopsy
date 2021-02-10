@@ -102,4 +102,11 @@ public class InvstLogic extends ApplicationLogic{
                 System.out.println("Image must be encapsulated by double quotes. Ex: ant -Dimage=\"C:\\Users\\You\\image.E01\" run-sample");
         }
     }
+    
+    
+    public String[][] getExtFiles(Object selected){
+        String[][] result= {{"1","FILE1","C:USR\\HELLO\\WORLD"}};
+        
+        return result;
+    }
 }
