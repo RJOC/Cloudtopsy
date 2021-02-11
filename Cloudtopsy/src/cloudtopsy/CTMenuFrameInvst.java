@@ -46,13 +46,13 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
     private CTMenuFrameInvst menuParent;
     
     //Frame construction variables
-    private JLabel heading, fill1, fill2, fill3, fill4;
-    private JButton createCase, uploadImage, cloudUse, removeImage, listFiles, createReport, closeCase, changePassword,  logout;
+    private JLabel heading, fill1, fill2, fill3, fill4, dirHead;
+    private JButton createCase, openCase, cloudUse, removeImage, listFiles, createReport, closeCase, changePassword,  logout;
     
     
     //Sinleton related
     private Users curUser; 
-    private String uname;
+    private String uname, curDir;
     
     
     public CTMenuFrameInvst(Cloudtopsy dad, InvstLogic inLogic ){
@@ -63,6 +63,10 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         //Singleton call
         curUser = CurrentUserSingleton.getInstance();
         uname = curUser.getuName();
+        curDir = curUser.getCurDir();
+        
+        
+        
         
         //Frame configuration
         setTitle("Investigator Menu");
@@ -75,21 +79,34 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         fill4 = new JLabel(" ");
         
         //First Section
+        JPanel secHead = new JPanel();
+        secHead.setLayout(new GridLayout(2,1));
+   
+        
         heading = new JLabel("Welcome "+ uname);
         heading.setHorizontalAlignment(JLabel.CENTER);
         heading.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
-        add(heading,BorderLayout.NORTH);
-        
+    
+        dirHead = new JLabel("Current Case DB: " + curDir);
+        dirHead.setHorizontalAlignment(JLabel.CENTER);
+        dirHead.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));      
+        secHead.add(heading);
+        secHead.add(dirHead);
+    
         //Second Section
         JPanel sec1 = new JPanel();
-        sec1.setLayout(new GridLayout(6,1));
-        sec1.add(fill1);
-        sec1.add(fill2); 
+        sec1.setLayout(new GridLayout(5,1));
+
         
         //Create new case
         createCase = new JButton("Create Case");
         createCase.addActionListener(this);
         sec1.add(createCase);
+        
+        //Upload Disk Image
+        openCase = new JButton("Open Case");
+        openCase.addActionListener(this);
+        sec1.add(openCase);
         
         //Establish use of cloud storage platforms
         cloudUse = new JButton("Establish Cloud Use");
@@ -100,12 +117,6 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         listFiles = new JButton("List Files of Type");
         listFiles.addActionListener(this);
         sec1.add(listFiles);
-        
-        //Upload Disk Image
-        uploadImage = new JButton("Upload Disk Image");
-        uploadImage.addActionListener(this);
-        sec1.add(uploadImage);
-       
         
         //Remove Disk Image
         removeImage = new JButton("Remove Disk Image");
@@ -142,6 +153,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         
        //JFrame Layout
         setSize(650,550);
+        getContentPane().add(secHead,BorderLayout.NORTH);
         getContentPane().add(sec1,BorderLayout.CENTER);
         getContentPane().add(sec2,BorderLayout.SOUTH);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -177,13 +189,15 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         }else if(source == listFiles){
             setVisible(false);
             CTListFiles listfiles = new CTListFiles(this, inLogic);
-        }else if(source == uploadImage){
+        }else if(source == openCase){
             setVisible(false);
+ 
             try {
-                CTOpenCase openase = new CTOpenCase();
+                CTOpenCase openase = new CTOpenCase(this, inLogic);
             } catch (SQLException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         }else if(source == removeImage){
 
         }else if(source == createReport){

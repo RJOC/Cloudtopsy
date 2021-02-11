@@ -24,7 +24,7 @@ public class Admin extends Users {
     }
     
     public Admin(int uID, String uName, String fName, String lName){
-        super(uID, uName);
+        super(uID, uName,"");
         this.fName = fName;
         this.lName = lName;
     }

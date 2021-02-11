@@ -15,6 +15,8 @@
 package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Users;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -34,7 +36,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -60,12 +64,16 @@ public class CTListFiles extends JFrame implements ActionListener {
     private JTable filetable;
     private ArrayList<String[]> row = new ArrayList<String[]>(); 
     
+        //Sinleton related
+    private Users curUser = CurrentUserSingleton.getInstance();; 
+    private String curDir = "";
+    
     
     public CTListFiles(CTMenuFrameInvst dad, InvstLogic inLogic){
         this.inLogic = inLogic;
         parent = dad;
-    
-        
+       
+
         fill = new JLabel("                           ");
         fill1 = new JLabel("                          ");
         
@@ -130,8 +138,6 @@ public class CTListFiles extends JFrame implements ActionListener {
         int j = 0;
         for(int widthL: columnsWidth ){
             TableColumn column = filetable.getColumnModel().getColumn(j++);
-            column.setMinWidth(widthL);
-            column.setMaxWidth(widthL);
             column.setPreferredWidth(widthL);
         }
         
@@ -151,8 +157,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         back.addActionListener(this);
         sec2.add(back);
         
-        
-        
+        curDir = curUser.getCurDir();
         
         //action listener for the combobox
         fileext.addActionListener(new ActionListener(){
@@ -163,7 +168,11 @@ public class CTListFiles extends JFrame implements ActionListener {
                 System.out.println(selected);
                 String column[]={"ID","File","Directory"};
                 try {
-                    row = inLogic.getExtFiles(selected);
+                    if(curDir != null){
+                         JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
+                    }else{
+                        row = inLogic.getExtFiles(selected,curDir);
+                    }
                 } catch (TskCoreException ex) {
                     Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
@@ -173,6 +182,7 @@ public class CTListFiles extends JFrame implements ActionListener {
                 Iterator i = row.iterator();
                 while(i.hasNext()){
                     String temp[] = (String[]) i.next();
+
                     tabmodel.addRow(temp);
                 }           
             }

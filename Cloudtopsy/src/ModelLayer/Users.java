@@ -17,15 +17,16 @@ package ModelLayer;
 
 public class Users implements CustomDataType{
     private int uID;
-    private String uName;
+    private String uName, curDir;
     
     public Users(){
-        this(-1,"empty");
+        this(-1,"empty", "");
     }
     
-    public Users(int uID, String uName){
+    public Users(int uID, String uName, String curDir){
         this.uID = uID;
         this.uName = uName;
+        this.curDir = curDir;
     }
     
     public int getuID(){
@@ -44,9 +45,19 @@ public class Users implements CustomDataType{
         this.uName = uName;
     }
     
+    public void setCurDir(String curDir){
+        this.curDir = curDir;
+    }
+    
+    public String getCurDir(){
+        return curDir;
+    }
+    
     @Override
     public String dataType(){
         return("Users");
     }
+    
+    
     
 }

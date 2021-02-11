@@ -93,8 +93,7 @@ public class InvstLogic extends ApplicationLogic{
         
     }
     
-    public ArrayList<String[]> getExtFiles(Object selected) throws TskCoreException, SQLException{
-        String imagepath = "E:\\My Backups\\Windows10img.E01";
+    public ArrayList<String[]> getExtFiles(Object selected, String imagepath) throws TskCoreException, SQLException{
         SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath + ".db");
  
         ArrayList<String[]> fileDataList = new ArrayList<String[]>();

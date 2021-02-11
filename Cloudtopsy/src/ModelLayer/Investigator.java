@@ -18,20 +18,30 @@ public class Investigator extends Users {
     
     private String fName;
     private String lName;
+    private String curDir;
     private int permissions;
     
     public Investigator(){
-        this(-1,"Default","Unknown","Unknown");
+        this(-1,"Default","Unknown","Unknown","Unknown");
     }
     
-    public Investigator(int uID, String uName, String uFName, String uLName){
-        super(uID, uName);
-        this.fName = fName;
-        this.lName = lName;
+    public Investigator(int uID, String uName, String uFName, String uLName, String curDir){
+        super(uID, uName, curDir);
+        this.fName = uFName;
+        this.lName = uLName;
+        this.curDir = curDir;
     }
     
     public String getFirstName(){
         return fName;
+    }
+    
+    public String getCurDir(){
+        return curDir;
+    }
+    
+    public void setCurDir(String curDir){
+        this.curDir = curDir;
     }
     
     public void setFirstName(String fName){

@@ -42,7 +42,7 @@ public class CurrentUserSingleton {
                     currentUser = new Admin(uID, uName, uFName, uLName);
                     break;
                 case "Investigator": //invest permission IF is 2
-                    currentUser = new Investigator(uID, uName,uFName, uLName);
+                    currentUser = new Investigator(uID, uName,uFName, uLName, "");
                     break;
                     
                 default:

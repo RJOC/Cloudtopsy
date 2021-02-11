@@ -15,6 +15,8 @@
 package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Users;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -68,6 +70,10 @@ public class CTCreateCase extends JFrame implements ActionListener{
     private String cimagepath, cdbpath;
     private int something4;
     
+    
+    //Sinleton related
+    private Users curUser = CurrentUserSingleton.getInstance();; 
+    private String curDir = "";
     
     
     //Related to the sleuth kit
@@ -183,6 +189,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
                 CImageF.setText(fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName());
                 CImageF.setForeground(Color.BLACK);
                 dbDir.setText(fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName()+".db");
+                curDir = fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName()+".db";
             }
             if (rVal == JFileChooser.CANCEL_OPTION) {
                 CImageF.setText("No Image Selected");
@@ -212,6 +219,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
                 if(result == true){
                     if(inLogic.storeCaseData(cname, cdesc, cimagepath, cdbpath)){
                         JOptionPane.showMessageDialog(null, "The case has been created!"); 
+                        curUser.setCurDir(curDir);
                         parent.setVisible(true);
                         dispose();
                     }else{
