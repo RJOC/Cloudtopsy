@@ -15,6 +15,7 @@
 package ApplicationLayer;
 
 import cloudtopsy.CTCreateCase;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -92,6 +93,36 @@ public class InvstLogic extends ApplicationLogic{
         
     }
     
+    public ArrayList<String[]> getExtFiles(Object selected) throws TskCoreException, SQLException{
+        String imagepath = "E:\\My Backups\\Windows10img.E01";
+        SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath + ".db");
+ 
+        ArrayList<String[]> fileDataList = new ArrayList<String[]>();
+        
+            // print out all the images found, and their children
+        List<Image> images = existingCase.getImages();
+        for (Image image : images) {
+            System.out.println("Found image: " + image.getName());
+            System.out.println("There are " + image.getChildren().size() + " children.");
+            for (Content content : image.getChildren()) {
+                System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
+            }
+        }
+
+            // print out all .txt files found
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%.txt')");
+        
+        for (AbstractFile file : files) {
+            String[] fileData = new String[3];
+            fileData[0] = (String.valueOf(file.getId()));
+            fileData[1] = file.getName();
+            fileData[2] = file.getParentPath();
+            fileDataList.add((String[])fileData);
+        }
+        
+        return fileDataList;
+    }
+    
     
     public static void usage(String error){
         System.out.println("Usage: ant -Dimage:{image string} run-sample");
@@ -103,10 +134,4 @@ public class InvstLogic extends ApplicationLogic{
         }
     }
     
-    
-    public String[][] getExtFiles(Object selected){
-        String[][] result= {{"1","FILE1","C:USR\\HELLO\\WORLD"}};
-        
-        return result;
-    }
 }

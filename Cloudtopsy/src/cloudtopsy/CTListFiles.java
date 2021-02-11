@@ -16,6 +16,7 @@ package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -23,7 +24,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -32,6 +37,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import org.sleuthkit.datamodel.TskCoreException;
 
 public class CTListFiles extends JFrame implements ActionListener {
     
@@ -50,7 +58,7 @@ public class CTListFiles extends JFrame implements ActionListener {
     private JComboBox fileext;
     private DefaultListCellRenderer listRenderer;
     private JTable filetable;
-    private String row[][]={{"","",""}}; 
+    private ArrayList<String[]> row = new ArrayList<String[]>(); 
     
     
     public CTListFiles(CTMenuFrameInvst dad, InvstLogic inLogic){
@@ -95,27 +103,43 @@ public class CTListFiles extends JFrame implements ActionListener {
         fileext.setRenderer(listRenderer);
         fileext.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
         
-        fileext.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent event){
-                JComboBox fileext = (JComboBox) event.getSource();
-                Object selected = fileext.getSelectedItem();
-                System.out.println(selected);
-                row = inLogic.getExtFiles(selected);
-                filetable.repaint();
-                
-            }
-        });
         sec1.add(fileext);
         
        
         
         
         //Section middle
+        filetable = new JTable();
         
-        String column[]={"ID","File","Directory"};
-        filetable = new JTable(row,column);
+            //Table model 
+        Object[] columns ={"ID", "File Name", "File Directory"};
+        DefaultTableModel tabmodel = new DefaultTableModel();
+        tabmodel.setColumnIdentifiers(columns);
+        filetable.setModel(tabmodel);
+        
+        //configure table style
+        filetable.setBackground(Color.LIGHT_GRAY);
+        filetable.setForeground(Color.BLACK);
+        Font font = new Font("",0,15);
+        filetable.setFont(font);
+        
+                
+        int[] columnsWidth = {
+            50, 150,450
+        };
+        int j = 0;
+        for(int widthL: columnsWidth ){
+            TableColumn column = filetable.getColumnModel().getColumn(j++);
+            column.setMinWidth(widthL);
+            column.setMaxWidth(widthL);
+            column.setPreferredWidth(widthL);
+        }
+        
         filetable.setDefaultEditor(Object.class, null); 
-        JScrollPane filescroll=new JScrollPane(filetable); 
+        JScrollPane filescroll = new JScrollPane(filetable); 
+        filescroll.setBounds(0,0,880,200);
+
+        
         
         
         
@@ -127,6 +151,35 @@ public class CTListFiles extends JFrame implements ActionListener {
         back.addActionListener(this);
         sec2.add(back);
         
+        
+        
+        
+        //action listener for the combobox
+        fileext.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                tabmodel.setRowCount(0);
+                JComboBox fileext = (JComboBox) event.getSource();
+                Object selected = fileext.getSelectedItem();
+                System.out.println(selected);
+                String column[]={"ID","File","Directory"};
+                try {
+                    row = inLogic.getExtFiles(selected);
+                } catch (TskCoreException ex) {
+                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                Iterator i = row.iterator();
+                while(i.hasNext()){
+                    String temp[] = (String[]) i.next();
+                    tabmodel.addRow(temp);
+                }           
+            }
+        });
+        
+        
+
         
         //JFrame Layout
         setSize(650,550);

@@ -27,6 +27,7 @@ public class BACKUPjava {
     
     public boolean BACKUPjava(){
         
+        
             // print out all the images found, and their children
             List<Image> images = sk.getImages();
             for (Image image : images) {
@@ -42,6 +43,7 @@ public class BACKUPjava {
             for (AbstractFile file : files) {
                     System.out.println("Found text file: " + file.getName());
             }
+            
     }
     
     
