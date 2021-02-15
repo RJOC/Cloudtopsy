@@ -96,7 +96,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
         setLayout(new BorderLayout());
         
         createCLab = new JLabel("Create New Case:", JLabel.CENTER);
-        createCLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
+        createCLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         
         //First Section setting up
         JPanel sec1 = new JPanel();

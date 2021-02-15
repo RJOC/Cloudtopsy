@@ -94,7 +94,7 @@ public class InvstLogic extends ApplicationLogic{
     }
     
     public ArrayList<String[]> getExtFiles(Object selected, String imagepath) throws TskCoreException, SQLException{
-        SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath + ".db");
+        SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath);
  
         ArrayList<String[]> fileDataList = new ArrayList<String[]>();
         
@@ -109,7 +109,7 @@ public class InvstLogic extends ApplicationLogic{
         }
 
             // print out all .txt files found
-        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%.txt')");
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%" + selected + "')");
         
         for (AbstractFile file : files) {
             String[] fileData = new String[3];

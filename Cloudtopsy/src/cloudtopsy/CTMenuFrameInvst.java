@@ -26,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +55,9 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
     private Users curUser; 
     private String uname, curDir;
     
+            //Sinleton related
+    //private Users curUser = CurrentUserSingleton.getInstance();
+    //private String curDir = "";
     
     public CTMenuFrameInvst(Cloudtopsy dad, InvstLogic inLogic ){
         this.inLogic = inLogic;
@@ -95,7 +99,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
     
         //Second Section
         JPanel sec1 = new JPanel();
-        sec1.setLayout(new GridLayout(5,1));
+        sec1.setLayout(new GridLayout(5,2));
 
         
         //Create new case
@@ -139,9 +143,6 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         changePassword.addActionListener(this);
         sec1.add(changePassword);
         
-        //Spacing for gap
-        sec1.add(fill3);
-        sec1.add(fill4); 
         
         //Bottom buttons
         JPanel sec2 = new JPanel();
@@ -185,7 +186,11 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             }
         }else if(source == cloudUse){
             setVisible(false);
-            CTEstablishCU estcloudu = new CTEstablishCU(this, inLogic);
+            try {
+                CTEstablishCU estcloudu = new CTEstablishCU(this, inLogic);
+            } catch (IOException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }else if(source == listFiles){
             setVisible(false);
             CTListFiles listfiles = new CTListFiles(this, inLogic);
@@ -210,7 +215,11 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             CTChangePwordFrame changePword = new CTChangePwordFrame(this, new ApplicationLogic());
         }else if(source == logout){
             inLogic.logout();
-            parent.setVisible(true);
+            try {
+                Cloudtopsy logout = new Cloudtopsy(new ApplicationLogic());
+            } catch (IOException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            }
             dispose();
         }else{
              JOptionPane.showMessageDialog(null, "Program not responding! Bringing you to login screen");

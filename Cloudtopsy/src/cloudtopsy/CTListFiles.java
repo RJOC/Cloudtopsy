@@ -86,7 +86,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         JPanel sec1 = new JPanel();
         sec1.setLayout(new GridLayout(2,1));
         fileLab = new JLabel("Select File Extension:", JLabel.CENTER);
-        fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
         
@@ -158,7 +158,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         sec2.add(back);
         
         curDir = curUser.getCurDir();
-        
+        System.out.println("Cur Dir : " + curDir);
         //action listener for the combobox
         fileext.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
@@ -168,10 +168,11 @@ public class CTListFiles extends JFrame implements ActionListener {
                 System.out.println(selected);
                 String column[]={"ID","File","Directory"};
                 try {
-                    if(curDir != null){
-                         JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
-                    }else{
+                    if(curDir != ""){
+                        System.out.println(curDir);
                         row = inLogic.getExtFiles(selected,curDir);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
                     }
                 } catch (TskCoreException ex) {
                     Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);

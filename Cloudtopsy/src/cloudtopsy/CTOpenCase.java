@@ -74,7 +74,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
         setLayout(new BorderLayout());
         
         openCaseLab = new JLabel("Open an Existing Case:", JLabel.CENTER);
-        openCaseLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 40));
+        openCaseLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         
         //First Section setting up
         JPanel sec1 = new JPanel();
@@ -166,7 +166,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
                 CTMenuFrameInvst openase = new CTMenuFrameInvst(home,inLogic);
                 dispose();
             }else{
-                JOptionPane.showMessageDialog(null, "There has been an error: The case has not been opened!");
+                JOptionPane.showMessageDialog(null, "Please select a case to be opened!");
             }
         }else if(source == clear){
             CImageFLab.setText("Select Database:");
