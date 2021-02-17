@@ -133,4 +133,51 @@ public class InvstLogic extends ApplicationLogic{
         }
     }
     
+    public static ArrayList<String[]> checkCloudUse(String imagepath) throws TskCoreException{
+        
+        SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath);
+        ArrayList<String[]> fileDataList = new ArrayList<String[]>();
+        String[] fileData = {};
+        
+            // print out all the images found, and their children
+        List<Image> images = existingCase.getImages();
+        for (Image image : images) {
+            System.out.println("Found image: " + image.getName());
+            System.out.println("There are " + image.getChildren().size() + " children.");
+            for (Content content : image.getChildren()) {
+                System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
+            }
+        }
+        
+            // print out all .txt files found
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER('%Dropbox%')");
+        
+        
+        
+        for (AbstractFile file : files) {
+            
+      
+            fileData = new String[4];
+            fileData[0] = (String.valueOf(file.getId()));
+            fileData[1] = file.getName();
+            fileData[3] = file.getParentPath();
+            
+            if(fileData[3].toLowerCase().contains("dropbox")){
+                fileData[2] = "Dropbox";
+            }else if(fileData[3].contains("google")){
+                fileData[2] = "Google Drive";
+            }else if(fileData[3].contains("evernote")){
+                fileData[2] = "Evernote";
+            }else if(fileData[3].contains("oneDrive")){
+                fileData[2] = "One Drive";
+            }
+            fileDataList.add((String[])fileData);
+
+        }
+        
+        
+        
+        return fileDataList;
+    }
+    
 }

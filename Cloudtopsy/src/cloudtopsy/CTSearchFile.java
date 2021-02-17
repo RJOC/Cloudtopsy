@@ -45,7 +45,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.sleuthkit.datamodel.TskCoreException;
 
-public class CTListFiles extends JFrame implements ActionListener {
+public class CTSearchFile extends JFrame implements ActionListener {
     
     
         //Logic  variable
@@ -69,7 +69,7 @@ public class CTListFiles extends JFrame implements ActionListener {
     private String curDir = "";
     
     
-    public CTListFiles(CTMenuFrameInvst dad, InvstLogic inLogic){
+    public CTSearchFile(CTMenuFrameInvst dad, InvstLogic inLogic){
         this.inLogic = inLogic;
         parent = dad;
        
@@ -79,13 +79,13 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         
         //Frame configuration
-        setTitle("List Files of Type");
+        setTitle("Search for File");
         setLayout(new BorderLayout());
          
         //Section top 
         JPanel sec1 = new JPanel();
         sec1.setLayout(new GridLayout(2,1));
-        fileLab = new JLabel("Select File Extension:", JLabel.CENTER);
+        fileLab = new JLabel("Search For a File:", JLabel.CENTER);
         fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
@@ -120,7 +120,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         filetable = new JTable();
         
             //Table model 
-        Object[] columns ={"ID", "File Name", "File Directory"};
+        Object[] columns ={"Select","ID", "File Name", "File Directory"};
         DefaultTableModel tabmodel = new DefaultTableModel();
         tabmodel.setColumnIdentifiers(columns);
         filetable.setModel(tabmodel);
@@ -133,7 +133,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         
                 
         int[] columnsWidth = {
-            50, 150,450
+            50, 50, 150, 400
         };
         int j = 0;
         for(int widthL: columnsWidth ){
@@ -166,7 +166,7 @@ public class CTListFiles extends JFrame implements ActionListener {
                 JComboBox fileext = (JComboBox) event.getSource();
                 Object selected = fileext.getSelectedItem();
                 System.out.println(selected);
-                String column[]={"ID","File","Directory"};
+                String column[]={"Select","ID","File","Directory"};
                 try {
                     if(curDir != ""){
                         System.out.println(curDir);

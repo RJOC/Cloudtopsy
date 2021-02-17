@@ -15,6 +15,8 @@
 package cloudtopsy;
 
 import ApplicationLayer.InvstLogic;
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.Users;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -25,6 +27,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,11 +37,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.sleuthkit.datamodel.AbstractFile;
+import org.sleuthkit.datamodel.TskCoreException;
 
-/**
- *
- * @author oconn
- */
 public class CTEstablishCU extends JFrame implements ActionListener{
     
         //Logic  variable
@@ -47,16 +50,22 @@ public class CTEstablishCU extends JFrame implements ActionListener{
     private CTMenuFrameInvst parent;
     
     
+            //Sinleton related
+    private Users curUser = CurrentUserSingleton.getInstance();; 
+    private String curDir = "";
+    
     
     //JFrame Vars
     private JLabel dropboxTick,googleTick,onedriveTick, evernoteTick, fill, fill1,fill2,fill3,establishCULab,dropboxLab,googleLab,evernoteLab,onedriveLab;
     private JButton back, submit, record;
     private BufferedImage nottick, tick;
+    private boolean clouds [];    
     
     public CTEstablishCU(CTMenuFrameInvst dad, InvstLogic inLogic) throws IOException{
         this.inLogic = inLogic;
         parent = dad;
     
+        curDir = curUser.getCurDir();
         
         fill = new JLabel("                           ");
         fill1 = new JLabel("                          ");
@@ -97,11 +106,11 @@ public class CTEstablishCU extends JFrame implements ActionListener{
         tick = ImageIO.read(this.getClass().getResource("tick.png"));
         nottick = ImageIO.read(this.getClass().getResource("nottick.png"));
         
-        dropboxTick = new JLabel(new ImageIcon(tick));
+        dropboxTick = new JLabel(new ImageIcon(nottick));
         sec1.add(dropboxTick);
         dropboxTick.setVisible(false);
         
-        googleTick = new JLabel(new ImageIcon(tick));
+        googleTick = new JLabel(new ImageIcon(nottick));
         sec1.add(googleTick);
         googleTick.setVisible(false);
         
@@ -123,11 +132,11 @@ public class CTEstablishCU extends JFrame implements ActionListener{
         
         //Second set of ticks
         
-        evernoteTick = new JLabel(new ImageIcon(tick));
+        evernoteTick = new JLabel(new ImageIcon(nottick));
         sec1.add(evernoteTick);
         evernoteTick.setVisible(false);
         
-        onedriveTick =new JLabel(new ImageIcon(tick));
+        onedriveTick =new JLabel(new ImageIcon(nottick));
         sec1.add(onedriveTick);
         onedriveTick.setVisible(false);
         
@@ -171,35 +180,82 @@ public class CTEstablishCU extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if(source == submit){
-
-            //DropBox
-            if(true){
-                //do something
-                dropboxTick.setIcon(new ImageIcon(nottick));
-            }
-            //Google Drive
-            if(true){
-                googleTick.setIcon(new ImageIcon(nottick));
-            }
-            //evernote
-            if(true){
-                evernoteTick.setIcon(new ImageIcon(nottick));
-            }   
-            //One drive
-            if(true){
-                onedriveTick.setIcon(new ImageIcon(nottick));        
-            }
-            googleTick.setVisible(true);
-            dropboxTick.setVisible(true);
-            evernoteTick.setVisible(true);
-            onedriveTick.setVisible(true);
-        }else if(source == record){
-            googleTick.setVisible(false);
-            dropboxTick.setVisible(false);
-            evernoteTick.setVisible(false);
-            onedriveTick.setVisible(false);
+        List<String[]> files = null;
+        clouds = new boolean[4];
+        clouds[0] = false;clouds[1] = false;clouds[2] = false;clouds[3] = false;
         
+        
+        if(source == submit){
+            if(curDir != ""){
+                try {
+                     files = inLogic.checkCloudUse(curDir);
+                } catch (TskCoreException ex) {
+                    Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                for(String[] filedata : files){
+                    if(clouds[0]== false || clouds[1] == false || clouds[2] ==false || clouds[3] == false){
+                        switch(filedata[2]){
+                            case "Dropbox":
+                                clouds[0] = true;
+                                break;
+                            case "Google Drive":
+                                clouds[1] = true;
+                                break;
+                            case "evernote":
+                                clouds[2] = true;
+                                break;
+                            case "One Drive":
+                                clouds[3] = true;
+                                break;
+                            default:
+                                System.out.println("Error Nothing inside..");
+                            
+                               
+                        }                
+                    }
+                }
+                //DropBox
+                if(clouds[0]){
+                    //do something
+                    dropboxTick.setIcon(new ImageIcon(tick));
+                }
+                //Google Drive
+                if(clouds[1]){
+                    googleTick.setIcon(new ImageIcon(tick));
+                }
+                //evernote
+                if(clouds[2]){
+                    evernoteTick.setIcon(new ImageIcon(tick));
+                }   
+                //One drive
+                if(clouds[3]){
+                    onedriveTick.setIcon(new ImageIcon(tick));        
+                }
+                googleTick.setVisible(true);
+                dropboxTick.setVisible(true);
+                evernoteTick.setVisible(true);
+                onedriveTick.setVisible(true);
+
+            }else{
+                JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
+            }
+        }else if(source == record){
+            if(curDir != ""){
+                for(String[] filedata : files){
+                    if(clouds[0]== false || clouds[1] == false || clouds[2] ==false || clouds[3] == false){
+                                       
+                    }
+                }
+                
+                googleTick.setVisible(false);
+                dropboxTick.setVisible(false);
+                evernoteTick.setVisible(false);
+                onedriveTick.setVisible(false);
+
+            }else{
+                JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
+            }
+             
         }else if(source == back){
             parent.setVisible(true);
             dispose();
@@ -207,5 +263,8 @@ public class CTEstablishCU extends JFrame implements ActionListener{
             parent.setVisible(true);
             dispose();
         }
+    
     }
 }
+    
+

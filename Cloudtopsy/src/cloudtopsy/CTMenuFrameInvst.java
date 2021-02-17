@@ -48,7 +48,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
     
     //Frame construction variables
     private JLabel heading, fill1, fill2, fill3, fill4, dirHead;
-    private JButton createCase, openCase, cloudUse, removeImage, listFiles, createReport, closeCase, changePassword,  logout;
+    private JButton createCase, openCase, cloudUse, searchFile, listFiles, createReport, closeCase, changePassword,  logout;
     
     
     //Sinleton related
@@ -118,14 +118,15 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         sec1.add(cloudUse);
         
         //List specified files
-        listFiles = new JButton("List Files of Type");
+        listFiles = new JButton("List Files by Extension");
         listFiles.addActionListener(this);
         sec1.add(listFiles);
         
-        //Remove Disk Image
-        removeImage = new JButton("Remove Disk Image");
-        removeImage.addActionListener(this);
-        sec1.add(removeImage);
+        //Search for file
+        searchFile =  new JButton("Seach for file");
+        searchFile.addActionListener(this);
+        sec1.add(searchFile);
+        
         
         
         //create report based on report listings
@@ -203,8 +204,9 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }else if(source == removeImage){
-
+        }else if(source == searchFile){
+            setVisible(false);
+            CTSearchFile searchfile = new CTSearchFile(this, inLogic);
         }else if(source == createReport){
             
         }else if(source == closeCase){
