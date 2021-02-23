@@ -41,6 +41,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.sleuthkit.datamodel.TskCoreException;
@@ -92,18 +93,11 @@ public class CTSearchFile extends JFrame implements ActionListener {
         
         
         ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add(".html");
-        fileextList.add(".zip");
-        fileextList.add(".exe");
-        fileextList.add(".php");
-        fileextList.add(".rar");
-        fileextList.add(".htm");
-        fileextList.add(".asp");
-        fileextList.add(".kzjv");
-        fileextList.add(".jpg");
-        fileextList.add(".log");
-        fileextList.add(".db");
-        fileextList.add(".csv");
+        fileextList.add("index.dat");
+        fileextList.add("config.db");
+        fileextList.add("");
+        fileextList.add("");
+        fileextList.add("");
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(true);
         listRenderer = new DefaultListCellRenderer();
@@ -117,13 +111,17 @@ public class CTSearchFile extends JFrame implements ActionListener {
         
         
         //Section middle
+
         filetable = new JTable();
         
             //Table model 
-        Object[] columns ={"Select","ID", "File Name", "File Directory"};
+        Object[] columns ={"ID", "File Name", "File Directory"};
         DefaultTableModel tabmodel = new DefaultTableModel();
         tabmodel.setColumnIdentifiers(columns);
         filetable.setModel(tabmodel);
+        
+        filetable.setRowSelectionAllowed(true);
+        filetable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         
         //configure table style
         filetable.setBackground(Color.LIGHT_GRAY);
@@ -133,7 +131,7 @@ public class CTSearchFile extends JFrame implements ActionListener {
         
                 
         int[] columnsWidth = {
-            50, 50, 150, 400
+             50, 150, 450
         };
         int j = 0;
         for(int widthL: columnsWidth ){
@@ -152,10 +150,13 @@ public class CTSearchFile extends JFrame implements ActionListener {
         
         //Second bottom 
         JPanel sec2 = new JPanel();
-        sec2.setLayout(new GridLayout(1,1));
+        sec2.setLayout(new GridLayout(1,2));
         back = new JButton("Back");
         back.addActionListener(this);
         sec2.add(back);
+        submit = new JButton("Submit Selection");
+        submit.addActionListener(this);
+        sec2.add(submit);
         
         curDir = curUser.getCurDir();
         System.out.println("Cur Dir : " + curDir);
@@ -166,8 +167,8 @@ public class CTSearchFile extends JFrame implements ActionListener {
                 JComboBox fileext = (JComboBox) event.getSource();
                 Object selected = fileext.getSelectedItem();
                 System.out.println(selected);
-                String column[]={"Select","ID","File","Directory"};
-                try {
+                String column[]={"ID","File","Directory"};
+                try{
                     if(curDir != ""){
                         System.out.println(curDir);
                         row = inLogic.getExtFiles(selected,curDir);
@@ -175,15 +176,14 @@ public class CTSearchFile extends JFrame implements ActionListener {
                         JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
                     }
                 } catch (TskCoreException ex) {
-                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
-                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
                 Iterator i = row.iterator();
                 while(i.hasNext()){
                     String temp[] = (String[]) i.next();
-
                     tabmodel.addRow(temp);
                 }           
             }
@@ -217,7 +217,27 @@ public class CTSearchFile extends JFrame implements ActionListener {
         Object source = e.getSource();
         
         if(source == submit){
-            //do something
+            //record results
+            int i = 0 ;
+            int [] selected = filetable.getSelectedRows();
+            Object [][] recordArr = new Object[selected.length][3];
+            for(int select: selected){
+  
+                recordArr[i][0] = Integer.parseInt(filetable.getValueAt(select, 0).toString());
+                recordArr[i][1] = filetable.getValueAt(select, 1).toString();
+                recordArr[i][2] = filetable.getValueAt(select, 2).toString();
+                //System.out.println(recordArr[i][0].toString() + recordArr[i][1] + recordArr[i][2]);
+                i++;
+            }
+            try {
+                inLogic.addFindingsToDB(recordArr);
+                JOptionPane.showMessageDialog(null, "The files you have selected had been added to the case record!");
+            } catch (SQLException ex) {
+                Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }else if(source == back){
             parent.setVisible(true);
             dispose();
@@ -226,8 +246,4 @@ public class CTSearchFile extends JFrame implements ActionListener {
             dispose();
         }
     }
-    
-    
-    
-    
 }

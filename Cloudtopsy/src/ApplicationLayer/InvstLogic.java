@@ -14,6 +14,9 @@
  */
 package ApplicationLayer;
 
+import ModelLayer.CurrentUserSingleton;
+import ModelLayer.DataAccess.DBWriter;
+import ModelLayer.Users;
 import cloudtopsy.CTCreateCase;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,10 +29,18 @@ import org.sleuthkit.datamodel.Content;
 import org.sleuthkit.datamodel.Image;
 import org.sleuthkit.datamodel.SleuthkitCase;
 import org.sleuthkit.datamodel.SleuthkitJNI;
+import org.sleuthkit.datamodel.TagName;
 import org.sleuthkit.datamodel.TskCoreException;
+import org.sleuthkit.datamodel.TskData;
+import org.sleuthkit.datamodel.*;
 import org.sleuthkit.datamodel.TskDataException;
 
 public class InvstLogic extends ApplicationLogic{
+    
+    
+     //Sinleton related
+    private Users curUser; 
+    
     
     public boolean storeCaseData(String cname,String cdesc,String cimagepath,String cdbpath){
         boolean result = false;
@@ -37,7 +48,7 @@ public class InvstLogic extends ApplicationLogic{
         return result;
     }
     
-    public boolean createCase(String imagepath){
+    public boolean createCase(String imagepath, String cname, String cdesc, String cdbpath){
         boolean result = false;
         try{
             //Creates the database and configures it
@@ -45,6 +56,8 @@ public class InvstLogic extends ApplicationLogic{
             
             //Timezone input
             String timezone = "";
+            curUser = CurrentUserSingleton.getInstance(); 
+            String curUName = curUser.getuName();
 
             //Add image process, number of steps process but this returns an object that allows it to happen
             //Timezone, addUnallocSpace, noFatFsOrphans
@@ -60,6 +73,7 @@ public class InvstLogic extends ApplicationLogic{
             try{
                 System.out.println("Logger output 1");
                 process.run(UUID.randomUUID().toString(), paths.toArray(new String[paths.size()]), 0);
+                DBWriter.addCase(cname, cdesc, cdbpath, curUName);
                 result = true;
                 System.out.println("Logger end 1");
                  
@@ -69,21 +83,15 @@ public class InvstLogic extends ApplicationLogic{
                 System.out.println("Logger end 2");
             }
 
-            // print out all the images found, and their children
-            List<Image> images = sk.getImages();
-            for (Image image : images) {
-                    System.out.println("Found image: " + image.getName());
-                    System.out.println("There are " + image.getChildren().size() + " children.");
-                    for (Content content : image.getChildren()) {
-                            System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
-                    }
-            }
-
-            // print out all .txt files found
-            List<AbstractFile> files = sk.findAllFilesWhere("LOWER(name) LIKE LOWER('%.txt')");
-            for (AbstractFile file : files) {
-                    System.out.println("Found text file: " + file.getName());
-            }
+//            // print out all the images found, and their children
+//            List<Image> images = sk.getImages();
+//            for (Image image : images) {
+//                    System.out.println("Found image: " + image.getName());
+//                    System.out.println("There are " + image.getChildren().size() + " children.");
+//                    for (Content content : image.getChildren()) {
+//                            System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
+//                    }
+//            }
 
         }catch(TskCoreException e){ //Something major happened
             System.out.println("Exception caught: " + e.getMessage());
@@ -93,9 +101,41 @@ public class InvstLogic extends ApplicationLogic{
         
     }
     
+    public ArrayList<String[]> getFiles(Object selected, String imagepath) throws TskCoreException, SQLException{
+         SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath);
+        
+        ArrayList<String[]> fileDataList = new ArrayList<String[]>();
+        List<AbstractFile> files;
+            // print out all the images found, and their children
+        List<Image> images = existingCase.getImages();
+        for (Image image : images) {
+            System.out.println("Found image: " + image.getName());
+            System.out.println("There are " + image.getChildren().size() + " children.");
+            for (Content content : image.getChildren()) {
+                System.out.println('"' + content.getName() + '"' + " is a child of " + image.getName());
+            }
+        }
+
+            files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%"+selected+"%')");
+  
+        
+        for (AbstractFile file : files) {
+            String[] fileData = new String[3];
+            fileData[0] = (String.valueOf(file.getId()));
+            fileData[1] = file.getName();
+            fileData[2] = file.getParentPath();
+            fileDataList.add((String[])fileData);
+        }
+        existingCase.close();
+        return fileDataList;
+    }
+    
     public ArrayList<String[]> getExtFiles(Object selected, String imagepath) throws TskCoreException, SQLException{
         SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath);
  
+        
+        
+        
         ArrayList<String[]> fileDataList = new ArrayList<String[]>();
         
             // print out all the images found, and their children
@@ -111,6 +151,7 @@ public class InvstLogic extends ApplicationLogic{
             // print out all .txt files found
         List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%" + selected + "')");
         
+        
         for (AbstractFile file : files) {
             String[] fileData = new String[3];
             fileData[0] = (String.valueOf(file.getId()));
@@ -118,7 +159,7 @@ public class InvstLogic extends ApplicationLogic{
             fileData[2] = file.getParentPath();
             fileDataList.add((String[])fileData);
         }
-        
+        existingCase.close();
         return fileDataList;
     }
     
@@ -133,7 +174,7 @@ public class InvstLogic extends ApplicationLogic{
         }
     }
     
-    public static ArrayList<String[]> checkCloudUse(String imagepath) throws TskCoreException{
+    public static ArrayList<String[]> checkCloudUse(String imagepath) throws TskCoreException, SQLException, ClassNotFoundException{
         
         SleuthkitCase existingCase = SleuthkitCase.openCase(imagepath);
         ArrayList<String[]> fileDataList = new ArrayList<String[]>();
@@ -150,13 +191,22 @@ public class InvstLogic extends ApplicationLogic{
         }
         
             // print out all .txt files found
-        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER('%Dropbox%')");
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER('%Dropbox')");
+
+        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%google%')"));
+
+        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%Evernote%')"));
         
+
+        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%OneDrive%')"));
         
+       
         
+        Object [][] recordArr = new Object[files.size()][3];
+        int i = 0;
         for (AbstractFile file : files) {
             
-      
+              
             fileData = new String[4];
             fileData[0] = (String.valueOf(file.getId()));
             fileData[1] = file.getName();
@@ -172,12 +222,36 @@ public class InvstLogic extends ApplicationLogic{
                 fileData[2] = "One Drive";
             }
             fileDataList.add((String[])fileData);
-
+            
+            recordArr[i][0] = file.getId();
+            recordArr[i][1] = file.getName();
+            recordArr[i][2] = file.getParentPath();
+            //DBWriter.addFinding(recordArr, imagepath);
+            i++;
         }
         
         
         
         return fileDataList;
+    }
+    
+    
+    
+    public boolean addFindingsToDB(Object[][] recordArr) throws SQLException, ClassNotFoundException{
+        Boolean result = false;
+        int i = 0;
+//        for(Object thing: recordArr){
+//            System.out.println(recordArr[i][0]);
+//            System.out.println(recordArr[i][1]);
+//            System.out.println(recordArr[i][2]);
+//            i++;
+//        }
+
+        curUser = CurrentUserSingleton.getInstance();
+        String curDir= curUser.getCurDir();
+        
+        result = DBWriter.addFinding(recordArr, curDir);
+        return result;
     }
     
 }

@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -127,4 +129,79 @@ public class DBWriter implements DBWriteBroker{
          
          return result;
      }
+     
+     public static boolean addCase(String cname, String cdesc, String cdbdir, String curUName){
+         boolean result = false;
+         
+        Connection connection;
+        PreparedStatement ps; 
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("INSERT INTO cases(cname, cdesc, cdbdir, userID, opendate) VALUES (?, ?, ?, (select userID from users where uname = ?), CURDATE());");
+            ps.setString(1,cname);
+            ps.setString(2,cdesc);
+            ps.setString(3,cdbdir);
+            ps.setString(4,curUName);
+            if(ps.execute()){
+                result = true;
+            }
+            connection.close();
+            
+        }catch (Exception ex){
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+        }
+         
+         
+         return result;
+     }
+     
+     
+     public static boolean addFinding(Object[][] recordArr, String curDir) throws SQLException, ClassNotFoundException{
+        boolean result = false;
+        
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+        PreparedStatement ps;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            ps = connection.prepareStatement("INSERT INTO casedata(cid, fid, fname, fdir) VALUES ((SELECT cid FROM cases WHERE cdbdir = ?),?,?,?);");
+            connection.setAutoCommit(false);
+        
+            int i = 0;
+            for(Object data: recordArr){
+                if(recordArr[i][0] != null){
+                    //do nothing
+                }else{
+                    recordArr[i][0] = 0;
+                }
+                if(recordArr[i][1] != null){
+                    //do nothing
+                }else{
+                    recordArr[i][1] = "Null";
+                }
+                if(recordArr[i][2] != null){
+                    //do nothing
+                }else{
+                    recordArr[i][2] = "Null";
+                }
+                
+                ps.setString(1,curDir);
+                ps.setString(2,recordArr[i][0].toString());
+                ps.setString(3,recordArr[i][1].toString());
+                ps.setString(4,recordArr[i][2].toString());
+                ps.addBatch();
+                i++;
+            }
+            int[] results=  ps.executeBatch();
+            connection.commit();
+            connection.close();
+            result = true;
+        }catch(Exception e){
+            e.printStackTrace();
+            connection.rollback();
+        }
+        return result;
+     }   
 }

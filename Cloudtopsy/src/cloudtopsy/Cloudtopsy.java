@@ -27,10 +27,6 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 
-/**
- *
- * @author oconn
- */
 public class Cloudtopsy extends JFrame implements ActionListener{
         
     //Logic declaration

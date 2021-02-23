@@ -72,8 +72,8 @@ public class CTCreateCase extends JFrame implements ActionListener{
     
     
     //Sinleton related
-    private Users curUser = CurrentUserSingleton.getInstance();; 
-    private String curDir = "";
+    private Users curUser = CurrentUserSingleton.getInstance();
+    private String curDir ;
     
     
     //Related to the sleuth kit
@@ -215,7 +215,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
                 boolean result =  false;
                  
                 JOptionPane.showMessageDialog(null, "Creating database now: This may take a long time! You will be notified upon completion!");
-                result = inLogic.createCase(cimagepath);
+                result = inLogic.createCase(cimagepath, cname, cdesc, cdbpath);
                 if(result == true){
                     if(inLogic.storeCaseData(cname, cdesc, cimagepath, cdbpath)){
                         JOptionPane.showMessageDialog(null, "The case has been created!"); 

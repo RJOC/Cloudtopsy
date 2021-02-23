@@ -27,6 +27,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,6 +125,8 @@ public class CTEstablishCU extends JFrame implements ActionListener{
         sec1.add(Icono);
         
         //second labels line
+        JPanel subBut = new JPanel();
+        subBut.setLayout(new GridLayout(1,3));
         evernoteLab =  new JLabel("Evernote Remnants Found:", JLabel.CENTER);
         sec1.add(evernoteLab);
                 
@@ -191,6 +194,10 @@ public class CTEstablishCU extends JFrame implements ActionListener{
                      files = inLogic.checkCloudUse(curDir);
                 } catch (TskCoreException ex) {
                     Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 for(String[] filedata : files){
                     if(clouds[0]== false || clouds[1] == false || clouds[2] ==false || clouds[3] == false){
@@ -209,8 +216,7 @@ public class CTEstablishCU extends JFrame implements ActionListener{
                                 break;
                             default:
                                 System.out.println("Error Nothing inside..");
-                            
-                               
+    
                         }                
                     }
                 }

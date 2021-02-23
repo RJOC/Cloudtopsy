@@ -5,7 +5,7 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: CTListFiles.java
+ * Class name: CTViewReport.java
  * Class decription: 
  * 
  * 
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -45,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.sleuthkit.datamodel.TskCoreException;
 
-public class CTListFiles extends JFrame implements ActionListener {
+public class CTViewReport extends JFrame implements ActionListener {
     
     
         //Logic  variable
@@ -69,7 +70,7 @@ public class CTListFiles extends JFrame implements ActionListener {
     private String curDir = "";
     
     
-    public CTListFiles(CTMenuFrameInvst dad, InvstLogic inLogic){
+    public CTViewReport(CTMenuFrameInvst dad, InvstLogic inLogic){
         this.inLogic = inLogic;
         parent = dad;
        
@@ -79,31 +80,24 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         
         //Frame configuration
-        setTitle("List Files of Type");
+        setTitle("Search for File");
         setLayout(new BorderLayout());
          
         //Section top 
         JPanel sec1 = new JPanel();
         sec1.setLayout(new GridLayout(2,1));
-        fileLab = new JLabel("Select File Extension:", JLabel.CENTER);
+        fileLab = new JLabel("Search For a File:", JLabel.CENTER);
         fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
         
         
         ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add(".html");
-        fileextList.add(".zip");
-        fileextList.add(".exe");
-        fileextList.add(".php");
-        fileextList.add(".rar");
-        fileextList.add(".htm");
-        fileextList.add(".asp");
-        fileextList.add(".kzjv");
-        fileextList.add(".jpg");
-        fileextList.add(".log");
-        fileextList.add(".db");
-        fileextList.add(".csv");
+        fileextList.add("index.dat");
+        fileextList.add("config.db");
+        fileextList.add("");
+        fileextList.add("");
+        fileextList.add("");
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(true);
         listRenderer = new DefaultListCellRenderer();
@@ -117,6 +111,22 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         
         //Section middle
+
+        DefaultTableModel dtm;
+        ButtonGroup bg;
+        JTable table;
+        JScrollPane jsp;
+        
+        
+        dtm = new DefaultTableModel();
+        dtm.setDataVector(new Object[][] {{"Course 1",new JRadioButton("Java")},{"Course 1",new JRadioButton("Python")}, {"Course 1",new JRadioButton("Scala")}, {"Course 2",new JRadioButton("Selenium")}, {"Course 2",new JRadioButton("Java Script")}},new Object[] {"Course","Technology"});
+        
+        
+        
+        
+        
+        
+        
         filetable = new JTable();
         
             //Table model 
@@ -133,7 +143,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         
                 
         int[] columnsWidth = {
-            50, 150,450
+             50, 150, 450
         };
         int j = 0;
         for(int widthL: columnsWidth ){
@@ -152,13 +162,10 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         //Second bottom 
         JPanel sec2 = new JPanel();
-        sec2.setLayout(new GridLayout(1,2));
+        sec2.setLayout(new GridLayout(1,1));
         back = new JButton("Back");
         back.addActionListener(this);
         sec2.add(back);
-        submit =  new JButton("Submit Selection");
-        submit.addActionListener(this);
-        sec2.add(submit);
         
         curDir = curUser.getCurDir();
         System.out.println("Cur Dir : " + curDir);
@@ -170,7 +177,7 @@ public class CTListFiles extends JFrame implements ActionListener {
                 Object selected = fileext.getSelectedItem();
                 System.out.println(selected);
                 String column[]={"ID","File","Directory"};
-                try {
+                try{
                     if(curDir != ""){
                         System.out.println(curDir);
                         row = inLogic.getExtFiles(selected,curDir);
@@ -178,17 +185,24 @@ public class CTListFiles extends JFrame implements ActionListener {
                         JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
                     }
                 } catch (TskCoreException ex) {
-                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
-                    Logger.getLogger(CTListFiles.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
                 Iterator i = row.iterator();
                 while(i.hasNext()){
                     String temp[] = (String[]) i.next();
-
-                    tabmodel.addRow(temp);
-                }           
+                    
+                    Object[] test = new Object[3];
+                    test[0] = new JRadioButton(temp[0]);
+                    test[1] = temp[1];
+                    test[2] = temp[2];
+                    
+                    tabmodel.insertRow(1, new Object[][] {{"hello",new JRadioButton(temp[0]), "world"}});
+                }  
+                
+                
             }
         });
         
@@ -220,32 +234,7 @@ public class CTListFiles extends JFrame implements ActionListener {
         Object source = e.getSource();
         
         if(source == submit){
-             //record results
-            int i = 0 ;
-            int [] selected = filetable.getSelectedRows();
-            Object [][] recordArr = new Object[selected.length][3];
-            for(int select: selected){
-  
-                recordArr[i][0] = Integer.parseInt(filetable.getValueAt(select, 0).toString());
-                recordArr[i][1] = filetable.getValueAt(select, 1).toString();
-                recordArr[i][2] = filetable.getValueAt(select, 2).toString();
-                //System.out.println(recordArr[i][0].toString() + recordArr[i][1] + recordArr[i][2]);
-                i++;
-            }
-            try {
-                inLogic.addFindingsToDB(recordArr);
-                JOptionPane.showMessageDialog(null, "The files you have selected had been added to the case record!");
-            } catch (SQLException ex) {
-                Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-            
-            
-            
-            
+            //do something
         }else if(source == back){
             parent.setVisible(true);
             dispose();
