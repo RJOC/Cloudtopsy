@@ -49,8 +49,6 @@ public class AdminLogic extends ApplicationLogic{
         uname = curUser.getuName();
         
         ArrayList<String> usersList = DBReader.getUnameList(uname);
-        
-        
         return usersList;
     }
     

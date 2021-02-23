@@ -221,6 +221,7 @@ public class InvstLogic extends ApplicationLogic{
             }else if(fileData[3].contains("oneDrive")){
                 fileData[2] = "One Drive";
             }
+            
             fileDataList.add((String[])fileData);
             
             recordArr[i][0] = file.getId();

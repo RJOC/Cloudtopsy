@@ -14,6 +14,7 @@
  */
 package cloudtopsy;
 
+import ApplicationLayer.ApplicationLogic;
 import ApplicationLayer.InvstLogic;
 import ModelLayer.CurrentUserSingleton;
 import ModelLayer.Users;
@@ -58,7 +59,7 @@ public class CTViewReport extends JFrame implements ActionListener {
     
     
     //JFrame Vars
-    private JLabel fill, fill1, fileLab;
+    private JLabel fill, fill1, fileLab, fileDecLab;
     private JButton back, submit;
     private JComboBox fileext;
     private DefaultListCellRenderer listRenderer;
@@ -70,7 +71,8 @@ public class CTViewReport extends JFrame implements ActionListener {
     private String curDir = "";
     
     
-    public CTViewReport(CTMenuFrameInvst dad, InvstLogic inLogic){
+    public CTViewReport(CTMenuFrameInvst dad, InvstLogic inLogic) throws ClassNotFoundException {
+        ApplicationLogic appLog = new ApplicationLogic();
         this.inLogic = inLogic;
         parent = dad;
        
@@ -80,35 +82,38 @@ public class CTViewReport extends JFrame implements ActionListener {
         
         
         //Frame configuration
-        setTitle("Search for File");
+        setTitle("View Report");
         setLayout(new BorderLayout());
          
         //Section top 
         JPanel sec1 = new JPanel();
-        sec1.setLayout(new GridLayout(2,1));
-        fileLab = new JLabel("Search For a File:", JLabel.CENTER);
+        sec1.setLayout(new GridLayout(3,1));
+        fileLab = new JLabel("Select a case to investigate:", JLabel.CENTER);
         fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
         
         
-        ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add("index.dat");
-        fileextList.add("config.db");
-        fileextList.add("");
-        fileextList.add("");
-        fileextList.add("");
+        ArrayList<String> fileextList = appLog.getCases();        
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(true);
         listRenderer = new DefaultListCellRenderer();
         listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items
         fileext.setRenderer(listRenderer);
         fileext.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
-        
         sec1.add(fileext);
         
-       
+        JPanel secinner = new JPanel();
+        secinner.setLayout(new GridLayout(2,2));
+        fileDecLab = new JLabel("File Description:", JLabel.CENTER);
+        fileDecLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+        secinner.add(fileDecLab);
         
+        
+        
+        
+        //add the inner section to the outer
+        sec1.add(secinner);
         
         //Section middle
 
@@ -116,17 +121,7 @@ public class CTViewReport extends JFrame implements ActionListener {
         ButtonGroup bg;
         JTable table;
         JScrollPane jsp;
-        
-        
-        dtm = new DefaultTableModel();
-        dtm.setDataVector(new Object[][] {{"Course 1",new JRadioButton("Java")},{"Course 1",new JRadioButton("Python")}, {"Course 1",new JRadioButton("Scala")}, {"Course 2",new JRadioButton("Selenium")}, {"Course 2",new JRadioButton("Java Script")}},new Object[] {"Course","Technology"});
-        
-        
-        
-        
-        
-        
-        
+     
         filetable = new JTable();
         
             //Table model 
@@ -175,20 +170,10 @@ public class CTViewReport extends JFrame implements ActionListener {
                 tabmodel.setRowCount(0);
                 JComboBox fileext = (JComboBox) event.getSource();
                 Object selected = fileext.getSelectedItem();
-                System.out.println(selected);
                 String column[]={"ID","File","Directory"};
-                try{
-                    if(curDir != ""){
-                        System.out.println(curDir);
-                        row = inLogic.getExtFiles(selected,curDir);
-                    }else{
-                        JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
-                    }
-                } catch (TskCoreException ex) {
-                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
+                //row = appLog.getCaseData(selected.toString());
+     
                 
                 Iterator i = row.iterator();
                 while(i.hasNext()){

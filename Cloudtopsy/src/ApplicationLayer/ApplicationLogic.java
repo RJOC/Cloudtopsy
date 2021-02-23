@@ -24,6 +24,7 @@ import ModelLayer.Users;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
 
 
@@ -102,6 +103,22 @@ public class ApplicationLogic {
 
         return hash.toString();
     }
+    
+    public ArrayList<String> getCases() throws ClassNotFoundException{ 
+        ArrayList<String> result = DBReader.getCases();
+         return result;
+    }
+    
+    
+    public ArrayList<String> getCaseData(String cname){
+        ArrayList<String> result = new ArrayList<String>();
+        
+        
+        return result;
+        
+    }
+    
+    
     
     public void logout(){
         CurrentUserSingleton.logOut();
