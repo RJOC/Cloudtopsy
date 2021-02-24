@@ -191,6 +191,35 @@ public class DBReader implements DBReadBroker{
         return caselist;
     }
     
+    public static String [] getCaseInfo(String cname) throws ClassNotFoundException{
+        String[] resultinfo = new String[4];
+        Connection connection;
+        PreparedStatement ps;
+        
+        try{
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT cdbdir,opendate,closedate,cid FROM cases where cname = ?");
+            ps.setString(1, cname);
+            ResultSet result = ps.executeQuery();
+            while(result.next()){
+                resultinfo[0] = result.getString(1);
+                resultinfo[1] = result.getString(2);
+                resultinfo[2] = result.getString(3);
+                resultinfo[3] = result.getString(4);
+            }
+            
+            if(resultinfo[2] == null|| resultinfo[2].equals(null)){
+                resultinfo[2] = "Case is Open";
+            }            
+            connection.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return resultinfo;
+    }
    
     
     

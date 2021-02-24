@@ -110,13 +110,26 @@ public class ApplicationLogic {
     }
     
     
-    public ArrayList<String> getCaseData(String cname){
-        ArrayList<String> result = new ArrayList<String>();
+    public String[] getCaseInfo(String cname) throws ClassNotFoundException{
+        String [] result = new String[3];
         
+        //Call to database that returns the description, the case database clocation and the case open date
+        
+          result = DBReader.getCaseInfo(cname);
+//        result[0] = "The case Database location here";
+//        result[1] = "The case opened date";
+//        result[2] = "The case closed date";
         
         return result;
         
     }
+    
+    public String[] getCaseData(String cid){
+         //Select fid, fname, fdir from casedata where cid = this.cid
+   
+         
+    }
+   
     
     
     

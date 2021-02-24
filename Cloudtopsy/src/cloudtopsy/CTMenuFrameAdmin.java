@@ -158,6 +158,12 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         }
         else if(source == viewCases){
             //Related to the sleuth kit 
+            setVisible(false);
+           try {
+               CTViewReport activeCases = new CTViewReport(this, new ApplicationLogic());
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(CTMenuFrameAdmin.class.getName()).log(Level.SEVERE, null, ex);
+           }
         }
         else if(source == obtainCaseDataReport){
             //Related to the sleuth kit 

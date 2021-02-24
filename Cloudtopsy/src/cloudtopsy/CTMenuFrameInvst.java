@@ -210,7 +210,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         }else if(source == viewReport){
             setVisible(false);
             try {
-                CTViewReport viewreport = new CTViewReport(this, inLogic);
+                CTViewReport viewreport = new CTViewReport(this, new ApplicationLogic());
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
