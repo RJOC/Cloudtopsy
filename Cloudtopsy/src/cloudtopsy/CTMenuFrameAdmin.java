@@ -59,6 +59,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         menuParent = this;
         
         
+        
         //Singleton call
         curUser = CurrentUserSingleton.getInstance();
         uname = curUser.getuName();

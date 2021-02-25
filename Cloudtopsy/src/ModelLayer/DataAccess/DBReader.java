@@ -222,5 +222,34 @@ public class DBReader implements DBReadBroker{
     }
    
     
+    public static ArrayList<String[]> getCaseData(String cid) throws ClassNotFoundException{
+        Connection connection;
+        PreparedStatement ps;
+        ArrayList<String[]>  casedata = new ArrayList<String[]>();
+   
+        try{
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT fid, fname, fdir FROM casedata where cid = ?");
+            ps.setString(1, cid);
+            ResultSet result = ps.executeQuery();
+            int i = 0;
+            while(result.next()){
+                String [] file = new String [3];
+                file[0] = result.getString(1);
+                file[1] = result.getString(2);
+                file[2] = result.getString(3);
+                casedata.add(file);
+            }
+
+            connection.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return casedata;
+    }
+    
     
 }

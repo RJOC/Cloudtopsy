@@ -65,12 +65,14 @@ public class CTViewReport extends JFrame implements ActionListener {
     private JComboBox fileext;
     private DefaultListCellRenderer listRenderer;
     private JTable filetable;
-    private ArrayList<String> row = new ArrayList<String>(); 
+    private ArrayList<String[]> row = new ArrayList<String[]>(); 
     
         //Sinleton related
     private Users curUser = CurrentUserSingleton.getInstance();; 
     private String curDir = "";
     
+    
+    private ApplicationLogic appLog = new ApplicationLogic();
     
     
         //This sets the return frame for the menu screen
@@ -89,7 +91,7 @@ public class CTViewReport extends JFrame implements ActionListener {
     
     
     public void CTViewReportFrame(ApplicationLogic appLogic) throws ClassNotFoundException {
-        ApplicationLogic appLog = new ApplicationLogic();
+        
        
 
         fill = new JLabel("                           ");
@@ -121,15 +123,6 @@ public class CTViewReport extends JFrame implements ActionListener {
         JPanel secinner = new JPanel();
         secinner.setLayout(new GridLayout(3,2));
         
-//        fileDecLab = new JLabel("Case Description:");
-//        fileDecLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
-//        secinner.add(fileDecLab);
-        
-//        fileDec = new JLabel("", JLabel.CENTER);
-//        fileDec.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 15));
-//        JScrollPane scrollPane = new JScrollPane(fileDec);  
-//        secinner.add(scrollPane);
-        
         cdbLab = new JLabel("Case Database Location:");
         cdbLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
         secinner.add(cdbLab);
@@ -159,10 +152,6 @@ public class CTViewReport extends JFrame implements ActionListener {
         
         //Section middle
 
-        DefaultTableModel dtm;
-        ButtonGroup bg;
-        JTable table;
-        JScrollPane jsp;
      
         filetable = new JTable();
         
@@ -209,11 +198,11 @@ public class CTViewReport extends JFrame implements ActionListener {
         //action listener for the combobox
         fileext.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                
-                
+                fileLab.setVisible(false);
                 tabmodel.setRowCount(0);
                 JComboBox fileext = (JComboBox) event.getSource();
                 Object selected = fileext.getSelectedItem();
+                String column[]={"ID","File","Directory"};
                 String [] caseinfo = null;
                 try {
                     caseinfo = appLog.getCaseInfo(selected.toString());
@@ -225,34 +214,20 @@ public class CTViewReport extends JFrame implements ActionListener {
                 copen.setText(caseinfo[1]);
                 cclose.setText(caseinfo[2]);
                 
-                appLog.getCaseData(caseinfo[3]);
-                caseinfo[3];
-                
-                //appLog.getCaseData();
-                String column[]={"ID","File","Directory"};
-                
-                //row =  appLog.getCaseData(selected.toString());
-     
+                                
+                try {
+                    row = appLog.getCaseData(caseinfo[3]);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CTViewReport.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 Iterator i = row.iterator();
                 while(i.hasNext()){
-                    String temp[] = (String[]) i.next();
-                    
-                    Object[] test = new Object[3];
-                    test[0] = new JRadioButton(temp[0]);
-                    test[1] = temp[1];
-                    test[2] = temp[2];
-                    
-                   
+                    tabmodel.addRow((String[]) i.next());
                 }  
-                
-                
             }
         });
-        
-        
 
-        
         //JFrame Layout
         setSize(650,550);
         

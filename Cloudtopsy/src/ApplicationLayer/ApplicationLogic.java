@@ -124,13 +124,15 @@ public class ApplicationLogic {
         
     }
     
-    public String[] getCaseData(String cid){
-         //Select fid, fname, fdir from casedata where cid = this.cid
-   
-         
+    public ArrayList<String[]> getCaseData(String cid) throws ClassNotFoundException{
+        //Select fid, fname, fdir from casedata where cid = this.cid
+        ArrayList<String[]> result  = new ArrayList<String[]>();
+        result = DBReader.getCaseData(cid);
+       
+        return result;              
+        
     }
    
-    
     
     
     public void logout(){

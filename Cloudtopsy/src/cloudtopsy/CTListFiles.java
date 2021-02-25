@@ -168,7 +168,6 @@ public class CTListFiles extends JFrame implements ActionListener {
                 tabmodel.setRowCount(0);
                 JComboBox fileext = (JComboBox) event.getSource();
                 Object selected = fileext.getSelectedItem();
-                System.out.println(selected);
                 String column[]={"ID","File","Directory"};
                 try {
                     if(curDir != ""){
@@ -240,11 +239,7 @@ public class CTListFiles extends JFrame implements ActionListener {
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
-            
-            
-            
+
             
         }else if(source == back){
             parent.setVisible(true);
