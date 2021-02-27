@@ -191,8 +191,32 @@ public class DBReader implements DBReadBroker{
         return caselist;
     }
     
+    public static ArrayList<String>  getOpenCases() throws ClassNotFoundException {
+        ArrayList<String>  caselist = new ArrayList<String>();
+        Connection connection;
+        PreparedStatement ps;
+        
+         try{
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT cname FROM cases where closedate IS NULL");
+            ResultSet result = ps.executeQuery();
+            
+            while(result.next()){
+                String casename = result.getString(1);
+                System.out.println("The caseis equal to:::" + casename);
+                caselist.add(casename);
+            }
+            connection.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return caselist;
+    }
+    
     public static String [] getCaseInfo(String cname) throws ClassNotFoundException{
-        String[] resultinfo = new String[4];
+        String[] resultinfo = new String[5];
         Connection connection;
         PreparedStatement ps;
         
@@ -200,14 +224,21 @@ public class DBReader implements DBReadBroker{
             
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
-            ps = connection.prepareStatement("SELECT cdbdir,opendate,closedate,cid FROM cases where cname = ?");
+            ps = connection.prepareStatement("SELECT cdbdir,opendate,closedate,cid,cdesc FROM cases where cname = ?");
             ps.setString(1, cname);
             ResultSet result = ps.executeQuery();
             while(result.next()){
+                //cdbdir
                 resultinfo[0] = result.getString(1);
+                //opendate
                 resultinfo[1] = result.getString(2);
+                //closedate
                 resultinfo[2] = result.getString(3);
+                //cid
                 resultinfo[3] = result.getString(4);
+                //casedesc
+                resultinfo[4] = result.getString(5);
+                
             }
             
             if(resultinfo[2] == null|| resultinfo[2].equals(null)){
@@ -251,5 +282,16 @@ public class DBReader implements DBReadBroker{
         return casedata;
     }
     
+    
+    public static String getCaseDB(String cname) throws ClassNotFoundException{
+        String []  result;
+        String casedbloc;
+        result = getCaseInfo(cname);
+        
+        
+        casedbloc = result[0];
+        
+        return casedbloc;
+    }
     
 }

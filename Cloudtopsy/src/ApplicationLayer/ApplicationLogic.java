@@ -109,6 +109,11 @@ public class ApplicationLogic {
          return result;
     }
     
+    public ArrayList<String> getOpenCases() throws ClassNotFoundException{ 
+        ArrayList<String> result = DBReader.getOpenCases();
+         return result;
+    }
+    
     
     public String[] getCaseInfo(String cname) throws ClassNotFoundException{
         String [] result = new String[3];
@@ -119,7 +124,6 @@ public class ApplicationLogic {
 //        result[0] = "The case Database location here";
 //        result[1] = "The case opened date";
 //        result[2] = "The case closed date";
-        
         return result;
         
     }
@@ -128,9 +132,7 @@ public class ApplicationLogic {
         //Select fid, fname, fdir from casedata where cid = this.cid
         ArrayList<String[]> result  = new ArrayList<String[]>();
         result = DBReader.getCaseData(cid);
-       
         return result;              
-        
     }
    
     

@@ -27,7 +27,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -49,7 +55,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
     private Cloudtopsy home;
     
     //Frame Variables
-    private JLabel fill, fill1, dbDirLab, dbDir, openCaseLab, CImageFLab;
+    private JLabel fill, fill1, fill2, orLab, dbDirLab, dbDir, openCaseLab, CImageFLab, caseLab;
     private JButton back, clear, submit, CImageF;
     private JFileChooser fileChoser;
 
@@ -57,8 +63,11 @@ public class CTOpenCase extends JFrame implements ActionListener{
     private Users curUser = CurrentUserSingleton.getInstance();; 
     private String curDir = "";
 
+    //For the select a case
+    private JComboBox fileext;
+    private DefaultListCellRenderer listRenderer;
     
-    public CTOpenCase(CTMenuFrameInvst dad, InvstLogic inLogic) throws SQLException{        
+    public CTOpenCase(CTMenuFrameInvst dad, InvstLogic inLogic) throws SQLException, ClassNotFoundException{        
      
         parent = dad;
         this.inLogic = inLogic;
@@ -67,6 +76,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
         
         fill = new JLabel("                           ");
         fill1 = new JLabel("                          ");
+        fill2 = new JLabel("                          ");
         
         
         //Frame configuration
@@ -78,12 +88,12 @@ public class CTOpenCase extends JFrame implements ActionListener{
         
         //First Section setting up
         JPanel sec1 = new JPanel();
-        sec1.setLayout(new GridLayout(4,2));
+        sec1.setLayout(new GridLayout(6,2));
                
         //Fill vars
         sec1.add(fill);
         sec1.add(fill1);
-        
+       
             //Case Image
         CImageFLab =  new JLabel("Select Database:", JLabel.CENTER);
         CImageFLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
@@ -91,6 +101,32 @@ public class CTOpenCase extends JFrame implements ActionListener{
         CImageF.addActionListener(new CTOpenCase.OpenL());    
         sec1.add(CImageFLab);
         sec1.add(CImageF);
+        
+            //OR label
+        orLab = new JLabel("OR", JLabel.CENTER);
+        orLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        sec1.add(orLab);
+        sec1.add(fill2);
+        
+            //Choose Case
+        caseLab = new JLabel("Select a Case: ", JLabel.CENTER);
+        caseLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        sec1.add(caseLab);
+        
+        
+        
+        ArrayList<String> fileextList = inLogic.getOpenCases();        
+        fileext = new JComboBox(fileextList.toArray());
+        fileext.setEditable(false);
+        listRenderer = new DefaultListCellRenderer();
+        listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER); // center-aligned items
+        fileext.setRenderer(listRenderer);
+        fileext.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        sec1.add(fileext);
+        
+        
+        
+        
             //Case databse label
         dbDirLab = new JLabel("Case database that will be opened: ",JLabel.CENTER); 
         dbDirLab.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 15));
@@ -135,6 +171,28 @@ public class CTOpenCase extends JFrame implements ActionListener{
             }
         };
         addWindowListener(exitListener);
+        
+        
+        
+                //action listener for the combobox
+        fileext.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                
+                JComboBox fileext = (JComboBox) event.getSource();
+                Object selected = fileext.getSelectedItem();
+                
+                try {
+                    curDir = inLogic.getDBLoc(selected.toString());
+                    curUser.setCurDir(curDir);
+                    CImageFLab.setText("Case Chosen");
+                    caseLab.setText("Case Chosen");
+                    dbDir.setText(curDir);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CTOpenCase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
     }
     
         class OpenL implements ActionListener {
@@ -148,6 +206,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
                 dbDir.setText(fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName());
                 curUser.setCurDir(fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName());
                 curDir = fileChoser.getCurrentDirectory().toString()+ "\\" + fileChoser.getSelectedFile().getName();
+                caseLab.setText("Database Chosen");
             }
             if (rVal == JFileChooser.CANCEL_OPTION) {
                 CImageF.setText("No Image Selected");

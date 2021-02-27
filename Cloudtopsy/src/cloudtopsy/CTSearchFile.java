@@ -93,9 +93,10 @@ public class CTSearchFile extends JFrame implements ActionListener {
         
         
         ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add("index.dat");
-        fileextList.add("config.db");
-        fileextList.add("");
+        fileextList.add("$OrphanFiles");
+        fileextList.add("$MBR");
+        fileextList.add("$Fat1");
+        fileextList.add("$Fat2");
         fileextList.add("");
         fileextList.add("");
         fileext = new JComboBox(fileextList.toArray());

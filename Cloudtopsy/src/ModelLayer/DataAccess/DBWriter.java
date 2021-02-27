@@ -204,4 +204,28 @@ public class DBWriter implements DBWriteBroker{
         }
         return result;
      }   
+     
+     
+     public static boolean closeCase(String cdbloc) throws SQLException{
+        Boolean result = false;
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+        PreparedStatement ps;        
+         try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("UPDATE cases SET closedate = CURDATE() WHERE cdbdir = ?;");
+            ps.setString(1,cdbloc);
+            ps.execute();
+            result = true;
+            connection.close();
+            
+        }catch (Exception ex){
+             System.out.println("failedhere inside dbwriter" + result);
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+        }
+        return result;
+     }
+     
 }

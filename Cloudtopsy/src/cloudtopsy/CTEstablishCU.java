@@ -41,7 +41,7 @@ import javax.swing.JPanel;
 import org.sleuthkit.datamodel.AbstractFile;
 import org.sleuthkit.datamodel.TskCoreException;
 
-public class CTEstablishCU extends JFrame implements ActionListener{
+public class CTEstablishCU extends JFrame implements ActionListener {
     
         //Logic  variable
     private InvstLogic inLogic;

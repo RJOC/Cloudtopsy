@@ -7,7 +7,7 @@
  * 
  * Class name: CTListFiles.java
  * Class decription: 
- * 
+ *          Director search
  * 
  * 
  * 
@@ -79,31 +79,23 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         
         //Frame configuration
-        setTitle("List Files of Type");
+        setTitle("Directory Search");
         setLayout(new BorderLayout());
          
         //Section top 
         JPanel sec1 = new JPanel();
         sec1.setLayout(new GridLayout(2,1));
-        fileLab = new JLabel("Select File Extension:", JLabel.CENTER);
+        fileLab = new JLabel("Search for Directory:", JLabel.CENTER);
         fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
         
         
         ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add(".html");
-        fileextList.add(".zip");
-        fileextList.add(".exe");
-        fileextList.add(".php");
-        fileextList.add(".rar");
-        fileextList.add(".htm");
-        fileextList.add(".asp");
-        fileextList.add(".kzjv");
-        fileextList.add(".jpg");
-        fileextList.add(".log");
-        fileextList.add(".db");
-        fileextList.add(".csv");
+        fileextList.add("dropbox");
+        fileextList.add("googledrive");
+        fileextList.add("s3");
+        fileextList.add("evernote");
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(true);
         listRenderer = new DefaultListCellRenderer();
@@ -172,7 +164,7 @@ public class CTListFiles extends JFrame implements ActionListener {
                 try {
                     if(curDir != ""){
                         System.out.println(curDir);
-                        row = inLogic.getExtFiles(selected,curDir);
+                        row = inLogic.getExtDir(selected,curDir);
                     }else{
                         JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
                     }
@@ -217,14 +209,12 @@ public class CTListFiles extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        
         if(source == submit){
              //record results
             int i = 0 ;
             int [] selected = filetable.getSelectedRows();
             Object [][] recordArr = new Object[selected.length][3];
             for(int select: selected){
-  
                 recordArr[i][0] = Integer.parseInt(filetable.getValueAt(select, 0).toString());
                 recordArr[i][1] = filetable.getValueAt(select, 1).toString();
                 recordArr[i][2] = filetable.getValueAt(select, 2).toString();
@@ -238,9 +228,7 @@ public class CTListFiles extends JFrame implements ActionListener {
                 Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            
+            }  
         }else if(source == back){
             parent.setVisible(true);
             dispose();

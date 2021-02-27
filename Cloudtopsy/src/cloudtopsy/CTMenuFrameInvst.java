@@ -118,19 +118,19 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         sec1.add(cloudUse);
         
         //List specified files
-        listFiles = new JButton("List Files by Extension");
+        listFiles = new JButton("Directory Search");
         listFiles.addActionListener(this);
         sec1.add(listFiles);
         
         //Search for file
-        searchFile =  new JButton("Seach for file");
+        searchFile =  new JButton("File Search");
         searchFile.addActionListener(this);
         sec1.add(searchFile);
         
         
         
         //create report based on report listings
-        viewReport = new JButton("View Case Report");
+        viewReport = new JButton("View Active Cases");
         viewReport.addActionListener(this);
         sec1.add(viewReport);
         
@@ -202,6 +202,8 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
                 CTOpenCase openase = new CTOpenCase(this, inLogic);
             } catch (SQLException ex) {
                 Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }else if(source == searchFile){
@@ -216,6 +218,13 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             }
             
         }else if(source == closeCase){
+            setVisible(false);
+            try {
+                
+                CTCloseCase closecase = new CTCloseCase(this, inLogic);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         }else if(source == changePassword){
             //To change password
