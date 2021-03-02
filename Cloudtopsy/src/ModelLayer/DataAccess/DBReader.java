@@ -180,7 +180,6 @@ public class DBReader implements DBReadBroker{
             
             while(result.next()){
                 String casename = result.getString(1);
-                System.out.println("The caseis equal to:::" + casename);
                 caselist.add(casename);
             }
             connection.close();
@@ -204,7 +203,7 @@ public class DBReader implements DBReadBroker{
             
             while(result.next()){
                 String casename = result.getString(1);
-                System.out.println("The caseis equal to:::" + casename);
+                
                 caselist.add(casename);
             }
             connection.close();
@@ -293,5 +292,57 @@ public class DBReader implements DBReadBroker{
         
         return casedbloc;
     }
+    
+    public static String getInvestID(String CName) throws ClassNotFoundException{
+        Connection connection;
+        PreparedStatement ps;
+        
+        String uid = "";
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT userID FROM cases WHERE cname = ?");
+            ps.setString(1,CName);
+            ResultSet result = ps.executeQuery();
+            while(result.next()){
+                uid = result.getString(1);
+            }
+            
+            connection.close();
+        }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return uid;
+    }
+    
+    public static String getInvestName(String uid) throws ClassNotFoundException{
+        Connection connection;
+        PreparedStatement ps;
+        String uname = "";
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/cloudtopsy?zeroDateTimeBehavior=convertToNull","root","");
+            ps = connection.prepareStatement("SELECT uname FROM users WHERE userID = ?");
+            ps.setString(1,uid);
+            ResultSet resultName = ps.executeQuery();
+            
+            while(resultName.next()){
+                uname = resultName.getString(1);
+                
+            }
+            
+            connection.close();
+        
+         }catch (SQLException ex) {
+            Logger.getLogger(ApplicationLogic.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return uname;
+    }
+    
+
     
 }

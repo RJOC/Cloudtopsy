@@ -28,6 +28,7 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,11 +57,14 @@ public class CTEstablishCU extends JFrame implements ActionListener {
     private String curDir = "";
     
     
+    
     //JFrame Vars
     private JLabel dropboxTick,googleTick,onedriveTick, evernoteTick, fill, fill1,fill2,fill3,establishCULab,dropboxLab,googleLab,evernoteLab,onedriveLab;
     private JButton back, submit, record;
     private BufferedImage nottick, tick;
-    private boolean clouds [];    
+    private boolean clouds [];
+    protected List<String[]> files = new ArrayList<String[]>();
+   
     
     public CTEstablishCU(CTMenuFrameInvst dad, InvstLogic inLogic) throws IOException{
         this.inLogic = inLogic;
@@ -156,7 +160,7 @@ public class CTEstablishCU extends JFrame implements ActionListener {
         submit = new JButton("Start Search");
         submit.addActionListener(this);
         sec2.add(submit); 
-        record = new JButton("Submit Findings");
+        record = new JButton("Show Findings");
         record.addActionListener(this);
         sec2.add(record);
         
@@ -183,7 +187,7 @@ public class CTEstablishCU extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        List<String[]> files = null;
+        //files = null;
         clouds = new boolean[4];
         clouds[0] = false;clouds[1] = false;clouds[2] = false;clouds[3] = false;
         
@@ -192,11 +196,7 @@ public class CTEstablishCU extends JFrame implements ActionListener {
             if(curDir != ""){
                 try {
                      files = inLogic.checkCloudUse(curDir);
-                } catch (TskCoreException ex) {
-                    Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (TskCoreException | SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(CTEstablishCU.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 for(String[] filedata : files){
@@ -205,13 +205,13 @@ public class CTEstablishCU extends JFrame implements ActionListener {
                             case "Dropbox":
                                 clouds[0] = true;
                                 break;
-                            case "Google Drive":
+                            case "GoogleDrive":
                                 clouds[1] = true;
                                 break;
                             case "evernote":
                                 clouds[2] = true;
                                 break;
-                            case "One Drive":
+                            case "OneDrive":
                                 clouds[3] = true;
                                 break;
                             default:
@@ -221,20 +221,20 @@ public class CTEstablishCU extends JFrame implements ActionListener {
                     }
                 }
                 //DropBox
-                if(clouds[0]){
+                if(clouds[0] == true){
                     //do something
                     dropboxTick.setIcon(new ImageIcon(tick));
                 }
                 //Google Drive
-                if(clouds[1]){
+                if(clouds[1]== true){
                     googleTick.setIcon(new ImageIcon(tick));
                 }
                 //evernote
-                if(clouds[2]){
+                if(clouds[2]== true){
                     evernoteTick.setIcon(new ImageIcon(tick));
                 }   
                 //One drive
-                if(clouds[3]){
+                if(clouds[3]== true){
                     onedriveTick.setIcon(new ImageIcon(tick));        
                 }
                 googleTick.setVisible(true);
@@ -247,17 +247,9 @@ public class CTEstablishCU extends JFrame implements ActionListener {
             }
         }else if(source == record){
             if(curDir != ""){
-                for(String[] filedata : files){
-                    if(clouds[0]== false || clouds[1] == false || clouds[2] ==false || clouds[3] == false){
-                                       
-                    }
-                }
-                
-                googleTick.setVisible(false);
-                dropboxTick.setVisible(false);
-                evernoteTick.setVisible(false);
-                onedriveTick.setVisible(false);
-
+            
+                CTShowFindings showfindings = new CTShowFindings(this, inLogic, files );
+                dispose();
             }else{
                 JOptionPane.showMessageDialog(null, "There is no open case: Head over to Open Case!");
             }

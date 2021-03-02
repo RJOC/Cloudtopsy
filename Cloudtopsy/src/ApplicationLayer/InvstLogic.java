@@ -19,8 +19,11 @@ import ModelLayer.DataAccess.DBReader;
 import ModelLayer.DataAccess.DBWriter;
 import ModelLayer.Users;
 import cloudtopsy.CTCreateCase;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -219,47 +222,80 @@ public class InvstLogic extends ApplicationLogic{
         }
         
             // print out all .txt files found
-        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER('%Dropbox')");
-
-        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%google%')"));
-
-        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%Evernote%')"));
-        
-
-        //files.addAll(existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER ('%OneDrive%')"));
-        
-       
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(parent_path) LIKE LOWER('%%')");
+ 
         
         Object [][] recordArr = new Object[files.size()][3];
         int i = 0;
-        for (AbstractFile file : files) {
-            
-              
+
+       for(AbstractFile file: files){
+   
             fileData = new String[4];
             fileData[0] = (String.valueOf(file.getId()));
             fileData[1] = file.getName();
             fileData[3] = file.getParentPath();
-            
-            if(fileData[3].toLowerCase().contains("dropbox")){
+           
+            //Dropbox
+            if(fileData[1].contains("dropbox")){
                 fileData[2] = "Dropbox";
-            }else if(fileData[3].contains("google")){
-                fileData[2] = "Google Drive";
-            }else if(fileData[3].contains("evernote")){
-                fileData[2] = "Evernote";
-            }else if(fileData[3].contains("oneDrive")){
-                fileData[2] = "One Drive";
+                //System.out.println("It has dropbox file");
+                i++;
+            }else if(fileData[3].contains("dropbox")){
+                fileData[2] = "Dropbox";
+                //System.out.println("It has dropbox dirr");
+                i++;
             }
             
-            fileDataList.add((String[])fileData);
+            //google drive
+            else if(fileData[1].contains("googledrive")){
+                fileData[2] = "GoogleDrive";
+                //System.out.println("It has Google Drive file");
+                i++;
+            }else if(fileData[3].contains("googledrive")){
+                fileData[2] = "Google Drive";
+                //System.out.println("It has Google Drive dirr");
+                i++;
+            }
             
+            //evernote
+            else if(fileData[1].contains("evernote")){
+                //System.out.println("found element");
+                //System.out.println(fileData[1]);
+                fileData[2] = "evernote";
+                //System.out.println("It has evernote file");
+                i++;
+            }else if(fileData[3].contains("evernote")){
+                //System.out.println("found element");
+                //System.out.println(fileData[3]);
+                fileData[2] = "evernote";
+                //System.out.println("It has evernote dirr");
+                i++;
+            }
+            
+            //one drive
+            else if(fileData[1].contains("onedrive")){
+                //System.out.println("found element");
+                //System.out.println(fileData[1]);
+                fileData[2] = "OneDrive";
+                //System.out.println("It has onedrive file");
+                i++;
+            }else if(fileData[3].contains("onedrive")){
+                //System.out.println("found element");
+                //System.out.println(fileData[3]);
+                fileData[2] = "OneDrive";
+                //System.out.println("It has onedrive dirr");
+                i++;
+                        
+            }else{
+                i++;
+                continue;
+            }
+
             recordArr[i][0] = file.getId();
             recordArr[i][1] = file.getName();
             recordArr[i][2] = file.getParentPath();
-            //DBWriter.addFinding(recordArr, imagepath);
-            i++;
-        }
-        
-        
+            fileDataList.add((String[])fileData);
+       }
         
         return fileDataList;
     }
@@ -287,6 +323,73 @@ public class InvstLogic extends ApplicationLogic{
         String result = "";
         
         result = DBReader.getCaseDB(caseName);
+        
+        return result;
+    }
+    
+    public boolean writeCSV(String cdbLoc, String cname) throws IOException, ClassNotFoundException{
+        boolean result = false;
+        String [] results =  DBReader.getCaseInfo(cname);
+        
+        System.out.println("Save location :" + results[0]);
+        
+        FileWriter csvWriter = new FileWriter(results[0]+"_Cloudtopsy.csv");
+        csvWriter. append("CaseID");
+        csvWriter.append(",");
+        csvWriter.append("CaseName");
+        csvWriter.append(",");
+        csvWriter.append("CaseDesc");
+        csvWriter.append(",");
+        csvWriter.append("Investigator");
+        csvWriter.append("\n");
+
+        
+        
+        String investID = DBReader.getInvestID(cname);
+        String investName = DBReader.getInvestName(investID);
+        
+                
+                
+        csvWriter.append(results[3]); //CID
+        csvWriter.append(",");
+        csvWriter.append(cname); //CName
+        csvWriter.append(",");
+        csvWriter.append(results[4]); //CDesc
+        csvWriter.append(",");
+        csvWriter.append(investName); //Investigator name
+        
+        
+        csvWriter.append("\n");
+        csvWriter.append("\n");
+        
+         
+        
+        
+//        // Our example data
+//        List<List<String>> rows = Arrays.asList(
+//            Arrays.asList("Jean", "author", "Java"),
+//            Arrays.asList("David", "editor", "Python"),
+//            Arrays.asList("Scott", "editor", "Node.js")
+//        );
+        
+        csvWriter. append("FileID");
+        csvWriter.append(",");
+        csvWriter.append("FileName");
+        csvWriter.append(",");
+        csvWriter.append("FileDir");
+           
+        csvWriter.append("\n");
+        
+        ArrayList<String[]> casedata = getCaseData(results[3]);
+        
+        
+        for(String[] rowData : casedata){
+            csvWriter.append(String.join(",", rowData));
+            csvWriter.append("\n");
+        }
+        csvWriter.flush();
+        csvWriter.close();
+        
         
         return result;
     }

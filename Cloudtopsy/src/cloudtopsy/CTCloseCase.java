@@ -29,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,6 +57,8 @@ public class CTCloseCase extends JFrame implements ActionListener {
     private CTMenuFrameInvst invstParent;
     private CTMenuFrameAdmin adminParent;
     
+    //To get case name for the csv
+    private Object selected;
     
     //JFrame Vars
     private JLabel fill, fill1, fileLab, cdescLab,cdesc, cdbLab, cdbLoc, copenLab, copen, ccloseLab, cclose;
@@ -207,7 +210,7 @@ public class CTCloseCase extends JFrame implements ActionListener {
                 
                 tabmodel.setRowCount(0);
                 JComboBox fileext = (JComboBox) event.getSource();
-                Object selected = fileext.getSelectedItem();
+                selected = fileext.getSelectedItem();
                 String column[]={"ID","File","Directory"};
                 String [] caseinfo = null;
                 try {
@@ -261,7 +264,7 @@ public class CTCloseCase extends JFrame implements ActionListener {
         Boolean result = false;
         if(source == submit){
             if(cdbLoc.getText().equals("")){
-                System.out.println("It worked");
+                JOptionPane.showMessageDialog(null, "Select a case: No case has been selected to close!");
             }else{
                 try {
                     //Close Case
@@ -280,7 +283,19 @@ public class CTCloseCase extends JFrame implements ActionListener {
             returnToLastFrame();
             dispose();
         }else if(source == getcsv){
-            //CSV Hanler here
+            if(selected != null){
+                try {
+                    //CSV Hanler here
+                    inLogic.writeCSV(curDir,selected.toString());
+                    JOptionPane.showMessageDialog(null, "CSV has been created and stored beside the case database!");
+                } catch (IOException ex) {
+                    Logger.getLogger(CTCloseCase.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(CTCloseCase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Select a case: No case has been selected to create a CSV for!");
+            }
             
         }else{
             returnToLastFrame();
