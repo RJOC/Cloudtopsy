@@ -5,7 +5,7 @@
  * University: University of Limerick, Ireland
  * 
  * 
- * Class name: CTCloseCase.java
+ * Class name: 
  * Class decription: 
  * 
  * 
@@ -29,8 +29,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -38,31 +36,33 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-public class CTCloseCase extends JFrame implements ActionListener {
+public class CTViewAllCases extends JFrame implements ActionListener {
     
-            //Logic  variable
-    private InvstLogic inLogic= new InvstLogic();
-
+        //Logic Variables
+    private InvstLogic inLogic;
+    //Frame to go back to
+    private CTMenuFrameInvst parent;
     
         //Frame variables
     private CTMenuFrameInvst invstParent;
     private CTMenuFrameAdmin adminParent;
     
-    //To get case name for the csv
-    private Object selected;
     
     //JFrame Vars
     private JLabel fill, fill1, fileLab, cdescLab,cdesc, cdbLab, cdbLoc, copenLab, copen, ccloseLab, cclose;
-    private JButton back, submit, getcsv;
+    private JButton back, submit;
     private JComboBox fileext;
     private DefaultListCellRenderer listRenderer;
     private JTable filetable;
@@ -72,40 +72,48 @@ public class CTCloseCase extends JFrame implements ActionListener {
     private Users curUser = CurrentUserSingleton.getInstance();; 
     private String curDir = "";
     
-            //This sets the return frame for the menu screen
-    public CTCloseCase(CTMenuFrameInvst dad, ApplicationLogic appLogic ) throws ClassNotFoundException{
+    
+    private ApplicationLogic appLog = new ApplicationLogic();
+    
+    
+        //This sets the return frame for the menu screen
+    public CTViewAllCases(CTMenuFrameInvst dad, ApplicationLogic appLogic ) throws ClassNotFoundException{
         invstParent = dad;
-        CTCloseCaseFrame(appLogic);
+        CTViewAllCasesFrame(appLogic);
     }
     
     //This sets the return frame for the menu screen
-    public CTCloseCase(CTMenuFrameAdmin dad, ApplicationLogic appLogic ) throws ClassNotFoundException{
+    public CTViewAllCases(CTMenuFrameAdmin dad, ApplicationLogic appLogic ) throws ClassNotFoundException{
         adminParent =  dad;
-        CTCloseCaseFrame(appLogic);
+        CTViewAllCasesFrame(appLogic);
     }
     
     
-    public void CTCloseCaseFrame(ApplicationLogic appLogic) throws ClassNotFoundException {
+
+    
+    
+    public void CTViewAllCasesFrame(ApplicationLogic appLogic) throws ClassNotFoundException{
         this.inLogic = inLogic;
-        
+
+
         fill = new JLabel("                           ");
         fill1 = new JLabel("                          ");
         
         
         //Frame configuration
-        setTitle("Close Case");
+        setTitle("View Report");
         setLayout(new BorderLayout());
          
         //Section top 
         JPanel sec1 = new JPanel();
         sec1.setLayout(new GridLayout(3,1));
-        fileLab = new JLabel("Select case to close:");
+        fileLab = new JLabel("Select case to investigate:");
         fileLab.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 35));
         sec1.add(fileLab);
         
         
         
-        ArrayList<String> fileextList = appLogic.getOpenCases();        
+        ArrayList<String> fileextList = appLog.getCases();        
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(false);
         listRenderer = new DefaultListCellRenderer();
@@ -149,6 +157,10 @@ public class CTCloseCase extends JFrame implements ActionListener {
         cdesc.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 15));
         secinner.add(cdesc);
         
+        
+        
+        
+        
         //add the inner section to the outer
         sec1.add(secinner);
         
@@ -190,18 +202,10 @@ public class CTCloseCase extends JFrame implements ActionListener {
         
         //Second bottom 
         JPanel sec2 = new JPanel();
-        sec2.setLayout(new GridLayout(1,3));
+        sec2.setLayout(new GridLayout(1,1));
         back = new JButton("Back");
         back.addActionListener(this);
         sec2.add(back);
-        
-        submit = new JButton("Close Case");
-        submit.addActionListener(this);
-        sec2.add(submit);
-        
-        getcsv = new JButton("Get CSV");
-        getcsv.addActionListener(this);
-        sec2.add(getcsv);
         
         curDir = curUser.getCurDir();
         //action listener for the combobox
@@ -210,11 +214,11 @@ public class CTCloseCase extends JFrame implements ActionListener {
                 
                 tabmodel.setRowCount(0);
                 JComboBox fileext = (JComboBox) event.getSource();
-                selected = fileext.getSelectedItem();
+                Object selected = fileext.getSelectedItem();
                 String column[]={"ID","File","Directory"};
                 String [] caseinfo = null;
                 try {
-                    caseinfo = appLogic.getCaseInfo(selected.toString());
+                    caseinfo = appLog.getCaseInfo(selected.toString());
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(CTViewReport.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -226,7 +230,7 @@ public class CTCloseCase extends JFrame implements ActionListener {
                 cdesc.setText(caseinfo[4]);
                      
                 try {
-                    row = appLogic.getCaseData(caseinfo[3]);
+                    row = appLog.getCaseData(caseinfo[3]);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(CTViewReport.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -256,54 +260,24 @@ public class CTCloseCase extends JFrame implements ActionListener {
             }
         };
         addWindowListener(exitListener);
+        
+        
     }
-
-    @Override
+    
+        @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        Boolean result = false;
+        
         if(source == submit){
-            if(cdbLoc.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "Select a case: No case has been selected to close!");
-            }else{
-                try {
-                    //Close Case
-                    result = inLogic.closeCase(cdbLoc.getText());
-                    if(result == true){
-                        JOptionPane.showMessageDialog(null,"Case has been closed!");
-                    }else{
-                        JOptionPane.showMessageDialog(null,"There has been an error, please try again!");
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(CTCloseCase.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-
+            //do something
         }else if(source == back){
             returnToLastFrame();
             dispose();
-        }else if(source == getcsv){
-            if(selected != null){
-                try {
-                    //CSV Hanler here
-                    inLogic.writeCSV(selected.toString());
-                    JOptionPane.showMessageDialog(null, "CSV has been created and stored beside the case database!");
-                } catch (IOException ex) {
-                    Logger.getLogger(CTCloseCase.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(CTCloseCase.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Select a case: No case has been selected to create a CSV for!");
-            }
-            
         }else{
             returnToLastFrame();
             dispose();
         }
     }
-    
-    
     
     
     public void returnToLastFrame(){
@@ -318,5 +292,5 @@ public class CTCloseCase extends JFrame implements ActionListener {
             System.exit(0); 
         }
     }
-    
+
 }

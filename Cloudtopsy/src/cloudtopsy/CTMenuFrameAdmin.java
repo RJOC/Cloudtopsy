@@ -97,7 +97,7 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         sec1.add(viewCases);
         
         //Obtain Case Data & Report
-        obtainCaseDataReport = new JButton("Obtain Case Data & Report");
+        obtainCaseDataReport = new JButton("Obtain Case Reports");
         obtainCaseDataReport.addActionListener(this);
         sec1.add(obtainCaseDataReport);
         
@@ -155,12 +155,19 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
        Object source = e.getSource();
        
         if(source == viewReports){
-            //Related to the sleuth kit 
+           try {
+                setVisible(false);
+               //Related to the sleuth kit
+               CTViewAllCases activeCases = new CTViewAllCases(this, new ApplicationLogic());
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(CTMenuFrameAdmin.class.getName()).log(Level.SEVERE, null, ex);
+           }
         }
         else if(source == viewCases){
             //Related to the sleuth kit 
             setVisible(false);
            try {
+            
                CTViewReport activeCases = new CTViewReport(this, new ApplicationLogic());
            } catch (ClassNotFoundException ex) {
                Logger.getLogger(CTMenuFrameAdmin.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,6 +175,13 @@ public class CTMenuFrameAdmin extends JFrame implements ActionListener{
         }
         else if(source == obtainCaseDataReport){
             //Related to the sleuth kit 
+            setVisible(false);
+           try {
+               CTCaseReports casereports =  new CTCaseReports(this, adLogic);
+           } catch (ClassNotFoundException ex) {
+               Logger.getLogger(CTMenuFrameAdmin.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
         }
         else if(source == changePassword){
             //To change password

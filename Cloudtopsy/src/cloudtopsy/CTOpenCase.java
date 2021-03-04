@@ -131,7 +131,7 @@ public class CTOpenCase extends JFrame implements ActionListener{
         dbDirLab = new JLabel("Case database that will be opened: ",JLabel.CENTER); 
         dbDirLab.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 15));
         dbDir = new JLabel("",JLabel.CENTER); 
-        dbDir.setFont(new Font(Font.SANS_SERIF, Font.PLAIN , 15));
+        dbDir.setFont(new Font(Font.SANS_SERIF, Font.BOLD , 15));
         sec1.add(dbDirLab);
         sec1.add(dbDir);
         

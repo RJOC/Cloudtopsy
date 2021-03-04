@@ -167,6 +167,7 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
             public void windowClosing(WindowEvent e){
                 parent.setVisible(true);
                 dispose();
+                
             }
         };
         addWindowListener(exitListener);

@@ -327,7 +327,7 @@ public class InvstLogic extends ApplicationLogic{
         return result;
     }
     
-    public boolean writeCSV(String cdbLoc, String cname) throws IOException, ClassNotFoundException{
+    public boolean writeCSV(String cname) throws IOException, ClassNotFoundException{
         boolean result = false;
         String [] results =  DBReader.getCaseInfo(cname);
         
@@ -341,6 +341,10 @@ public class InvstLogic extends ApplicationLogic{
         csvWriter.append("CaseDesc");
         csvWriter.append(",");
         csvWriter.append("Investigator");
+        csvWriter.append(",");
+        csvWriter.append("OpenDate");
+        csvWriter.append(",");
+        csvWriter.append("CloseDate");
         csvWriter.append("\n");
 
         
@@ -357,6 +361,10 @@ public class InvstLogic extends ApplicationLogic{
         csvWriter.append(results[4]); //CDesc
         csvWriter.append(",");
         csvWriter.append(investName); //Investigator name
+        csvWriter.append(",");
+        csvWriter.append(results[1].toString()); //Investigator name
+        csvWriter.append(",");
+        csvWriter.append(results[2]); //Investigator name
         
         
         csvWriter.append("\n");
@@ -393,6 +401,82 @@ public class InvstLogic extends ApplicationLogic{
         
         return result;
     }
+    
+    public boolean writeCSV(String cdbLoc, String cname) throws IOException, ClassNotFoundException{
+        boolean result = false;
+        String [] results =  DBReader.getCaseInfo(cname);
+        
+        System.out.println("Save location :" + results[0]);
+        
+        FileWriter csvWriter = new FileWriter(cdbLoc + cname + "_Cloudtopsy.csv");
+        csvWriter. append("CaseID");
+        csvWriter.append(",");
+        csvWriter.append("CaseName");
+        csvWriter.append(",");
+        csvWriter.append("CaseDesc");
+        csvWriter.append(",");
+        csvWriter.append("Investigator");
+        csvWriter.append(",");
+        csvWriter.append("OpenDate");
+        csvWriter.append(",");
+        csvWriter.append("CloseDate");
+        csvWriter.append("\n");
+
+        
+        
+        String investID = DBReader.getInvestID(cname);
+        String investName = DBReader.getInvestName(investID);
+        
+                
+                
+        csvWriter.append(results[3]); //CID
+        csvWriter.append(",");
+        csvWriter.append(cname); //CName
+        csvWriter.append(",");
+        csvWriter.append(results[4]); //CDesc
+        csvWriter.append(",");
+        csvWriter.append(investName); //Investigator name
+        csvWriter.append(",");
+        csvWriter.append(results[1].toString()); //Investigator name
+        csvWriter.append(",");
+        csvWriter.append(results[2]); //Investigator name
+        
+        
+        csvWriter.append("\n");
+        csvWriter.append("\n");
+        
+         
+        
+        
+//        // Our example data
+//        List<List<String>> rows = Arrays.asList(
+//            Arrays.asList("Jean", "author", "Java"),
+//            Arrays.asList("David", "editor", "Python"),
+//            Arrays.asList("Scott", "editor", "Node.js")
+//        );
+        
+        csvWriter. append("FileID");
+        csvWriter.append(",");
+        csvWriter.append("FileName");
+        csvWriter.append(",");
+        csvWriter.append("FileDir");
+           
+        csvWriter.append("\n");
+        
+        ArrayList<String[]> casedata = getCaseData(results[3]);
+        
+        
+        for(String[] rowData : casedata){
+            csvWriter.append(String.join(",", rowData));
+            csvWriter.append("\n");
+        }
+        csvWriter.flush();
+        csvWriter.close();
+        
+        
+        return result;
+    }
+    
 }
 
     
