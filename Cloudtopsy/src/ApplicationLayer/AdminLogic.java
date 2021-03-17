@@ -36,7 +36,7 @@ public class AdminLogic extends ApplicationLogic{
         if(checkCreateUser){
             return true;
         }else{
-            System.out.println("CHECKCREATEUSER_ADLOGIC");
+            //System.out.println("CHECKCREATEUSER_ADLOGIC");
             return false;
         }
     }

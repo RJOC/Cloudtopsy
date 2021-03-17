@@ -165,7 +165,11 @@ public class CTMenuFrameInvst extends JFrame implements ActionListener {
         WindowListener exitListener = new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent e){
-                parent.setVisible(true);
+                try {
+                    Cloudtopsy mainscreen = new Cloudtopsy(new ApplicationLogic());
+                } catch (IOException ex) {
+                    Logger.getLogger(CTMenuFrameInvst.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 dispose();
                 
             }

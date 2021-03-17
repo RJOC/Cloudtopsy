@@ -41,7 +41,7 @@ public class DBWriter implements DBWriteBroker{
                 registerUser("email", "firstName", "lastName", "hashpword", Integer.parseInt(data.getData().get(0).get(0)), data.getData().get(0).get(1));
             }
             
-        }else if(instruction.equals("RegisterClass")){
+        }else if(instruction.equals("")){
             /// TODO: implement method.
         }
     }
