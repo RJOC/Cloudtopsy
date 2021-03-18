@@ -207,7 +207,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
             cdesc = CDesc.getText();
             cimagepath = CImageF.getText();
             cdbpath = dbDir.getText();
-            if(cname != null && cdesc != null&& cimagepath != null && cdbpath != null){
+            if(cname != "" && cdesc != "" && cimagepath != ""  && cdbpath != ""){
                 System.out.println(cname);
                 System.out.println(cdesc);
                 System.out.println(cimagepath);

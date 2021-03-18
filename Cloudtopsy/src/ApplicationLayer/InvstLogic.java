@@ -75,16 +75,16 @@ public class InvstLogic extends ApplicationLogic{
 
             //Trying to do something
             try{
-                System.out.println("Logger output 1");
+                //System.out.println("Logger output 1");
                 process.run(UUID.randomUUID().toString(), paths.toArray(new String[paths.size()]), 0);
                 DBWriter.addCase(cname, cdesc, cdbpath, curUName);
                 result = true;
-                System.out.println("Logger end 1");
+                //System.out.println("Logger end 1");
                  
             } catch(TskDataException ex){
-                System.out.println("Logger output 2");
+                //System.out.println("Logger output 2");
                 Logger.getLogger(CTCreateCase.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Logger end 2");
+                //System.out.println("Logger end 2");
             }
 
 //            // print out all the images found, and their children
@@ -350,10 +350,7 @@ public class InvstLogic extends ApplicationLogic{
         
         
         String investID = DBReader.getInvestID(cname);
-        String investName = DBReader.getInvestName(investID);
-        
-                
-                
+        String investName = DBReader.getInvestName(investID);      
         csvWriter.append(results[3]); //CID
         csvWriter.append(",");
         csvWriter.append(cname); //CName
@@ -370,15 +367,7 @@ public class InvstLogic extends ApplicationLogic{
         csvWriter.append("\n");
         csvWriter.append("\n");
         
-         
         
-        
-//        // Our example data
-//        List<List<String>> rows = Arrays.asList(
-//            Arrays.asList("Jean", "author", "Java"),
-//            Arrays.asList("David", "editor", "Python"),
-//            Arrays.asList("Scott", "editor", "Node.js")
-//        );
         
         csvWriter. append("FileID");
         csvWriter.append(",");
