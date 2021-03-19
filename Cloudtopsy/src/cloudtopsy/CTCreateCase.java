@@ -207,11 +207,11 @@ public class CTCreateCase extends JFrame implements ActionListener{
             cdesc = CDesc.getText();
             cimagepath = CImageF.getText();
             cdbpath = dbDir.getText();
-            if(cname != "" && cdesc != "" && cimagepath != ""  && cdbpath != ""){
-                System.out.println(cname);
-                System.out.println(cdesc);
-                System.out.println(cimagepath);
-                System.out.println(cdbpath);
+            if((!cname.isEmpty()) && (!cdesc.isEmpty()) && cimagepath != ""  && cdbpath != ""){
+                System.out.println("case name:"+cname);
+                System.out.println("case desc:"+cdesc);
+                System.out.println("case imagepath:"+cimagepath);
+                System.out.println("case cdbpath:"+cdbpath);
                 boolean result =  false;
                  
                 JOptionPane.showMessageDialog(null, "Creating database now: This may take a long time! You will be notified upon completion!");
@@ -226,7 +226,7 @@ public class CTCreateCase extends JFrame implements ActionListener{
                         JOptionPane.showMessageDialog(null, "The case database has been created, but we could not store case details!");
                     }  
                 }else{
-                    JOptionPane.showMessageDialog(null, "There has been an error: There has been a problem creating the case!");
+                    JOptionPane.showMessageDialog(null, "Please ensure an image file was selected and has not previously been used!");
                 }
             }else{
                 JOptionPane.showMessageDialog(null, "There has been an error: Please ensure all fields are filled!");

@@ -88,15 +88,15 @@ public class CTLearnFrame extends JFrame implements ActionListener{
         sec2.add(funct4);
         sec2.add(funct5);
         
-        funct6 = new JLabel("Director & File keyword search!");
-        funct7 = new JLabel("Export CSV of the case report!");
+        funct6 = new JLabel("Directory & File keyword search!");
+        funct7 = new JLabel("Create a new user!");
         funct6.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));
         funct7.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20)); 
         sec2.add(funct6);
         sec2.add(funct7);
         
         funct8 = new JLabel("Close a case!");
-        funct9 = new JLabel("Create a new user!");
+        funct9 = new JLabel("Remove a user!");
         funct8.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20));
         funct9.setFont(new Font(Font.SANS_SERIF, Font.ITALIC, 20)); 
         sec2.add(funct8);

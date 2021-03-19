@@ -92,10 +92,13 @@ public class CTListFiles extends JFrame implements ActionListener {
         
         
         ArrayList<String> fileextList = new ArrayList<String>();
-        fileextList.add("dropbox");
-        fileextList.add("googledrive");
-        fileextList.add("s3");
-        fileextList.add("evernote");
+        fileextList.add("System");
+        fileextList.add("System Volume Information");
+        fileextList.add("OrphanFiles");
+        fileextList.add("Dropbox");
+        fileextList.add("GoogleDrive");
+        fileextList.add("Evernote");
+        fileextList.add("OneDrive");
         fileext = new JComboBox(fileextList.toArray());
         fileext.setEditable(true);
         listRenderer = new DefaultListCellRenderer();

@@ -83,7 +83,7 @@ public class CTShowFindings extends JFrame implements ActionListener {
         
         
         //Frame configuration
-        setTitle("Directory Search");
+        setTitle("Findings");
         setLayout(new BorderLayout());
          
 

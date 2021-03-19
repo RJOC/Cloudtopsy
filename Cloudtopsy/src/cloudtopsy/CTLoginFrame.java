@@ -45,6 +45,8 @@ public class CTLoginFrame extends JFrame implements ActionListener {
     private JPasswordField password;
     private JButton clear, submit, back;
     
+    private JPanel panel;
+    
     
     
     public CTLoginFrame (Cloudtopsy dad, ApplicationLogic appLogic){
@@ -147,14 +149,17 @@ public class CTLoginFrame extends JFrame implements ActionListener {
                 }else if (CurrentUserSingleton.getInstance() instanceof Investigator){//FInvestigator
                     CTMenuFrameInvst menu = new CTMenuFrameInvst(parent, new InvstLogic());
                 }else{
-                    JOptionPane.showMessageDialog(null,"Could not find user");
+                    
+                    
+                    JOptionPane.showMessageDialog(null,"Could not find user specified");
                     username.setText("");
                     password.setText("");
                     username.requestFocusInWindow(); 
                     parent.setVisible(true);
                 }
             }else{
-                JOptionPane.showMessageDialog(null,"There has been an error");
+                panel = new JPanel();
+                JOptionPane.showMessageDialog(panel, "The username or password you have entered is incorrect!", "Error", JOptionPane.ERROR_MESSAGE);
                 username.setText("");
                 password.setText("");
                 username.requestFocusInWindow();

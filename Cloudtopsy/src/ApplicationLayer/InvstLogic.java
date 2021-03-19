@@ -150,7 +150,7 @@ public class InvstLogic extends ApplicationLogic{
         }
 
             // print out all .txt files found
-        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%" + selected + "')");
+        List<AbstractFile> files = existingCase.findAllFilesWhere("LOWER(name) LIKE LOWER('%" + selected + "%')");
         
         
         for (AbstractFile file : files) {

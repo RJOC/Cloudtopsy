@@ -97,6 +97,10 @@ public class CTSearchFile extends JFrame implements ActionListener {
         fileextList.add("$MBR");
         fileextList.add("$Fat1");
         fileextList.add("$Fat2");
+        fileextList.add("Dropbox");
+        fileextList.add("Onedrive");
+        fileextList.add("Evernote");
+        fileextList.add("GoogleDrive");
         fileextList.add(".html");
         fileextList.add(".php");
         fileextList.add(".db");
@@ -181,8 +185,10 @@ public class CTSearchFile extends JFrame implements ActionListener {
                     }
                 } catch (TskCoreException ex) {
                     Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "There has been an error!");
                 } catch (SQLException ex) {
                     Logger.getLogger(CTSearchFile.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "There has been an error!");
                 }
                 
                 Iterator i = row.iterator();
