@@ -23,7 +23,3 @@ Write this guide later
 
 
 ## TODO List:
- [X] - Set up GitHub  
- [ ] - Set up NetBean project  
- [ ] - GUI development  
- [ ] - 
